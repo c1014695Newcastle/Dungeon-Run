@@ -1,0 +1,124 @@
+import java.util.Random;
+
+public class Player {
+    private int level;
+    private int possibleHealth;
+    private int health;
+    private int chopDamage;
+
+    private int swingDamage;
+
+    private int castDamage;
+    private int armour;
+
+    public Player() {
+        this.level = 1;
+        this.possibleHealth = 50;
+        this.health = 50;
+        this.armour = 0;
+        this.castDamage = 5;
+        this.chopDamage = 15;
+        this.swingDamage = 25;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getPossibleHealth() {
+        return possibleHealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setPossibleHealth(int possibleHealth) {
+        this.possibleHealth = possibleHealth;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getChopDamage() {
+        return chopDamage;
+    }
+
+    public void setChopDamage(int chopDamage) {
+        this.chopDamage = chopDamage;
+    }
+
+    public int getSwingDamage() {
+        return swingDamage;
+    }
+
+    public void setSwingDamage(int swingDamage) {
+        this.swingDamage = swingDamage;
+    }
+
+    public int getCastDamage() {
+        return castDamage;
+    }
+
+    public void setCastDamage(int castDamage) {
+        this.castDamage = castDamage;
+    }
+
+    public int getArmour() {
+        return armour;
+    }
+
+    public void setArmour(int armour) {
+        this.armour = armour;
+    }
+
+    public int chop(){
+        Random rn = new Random();
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll >= 2 && roll < 4){
+            return this.chopDamage/2;
+        } else if (roll >= 4 && roll < 6) {
+            return this.chopDamage;
+        } else if (roll >= 6 && roll < 8) {
+            return this.chopDamage + (this.chopDamage * roll/10);
+        } else if (roll >= 8) {
+            return this.chopDamage * 2;
+        }
+        return 0;
+    }
+
+    public int[] cast(){
+        Random rn = new Random();
+        int roll;
+        int[] damage = {0,0,0};
+        for (int x : damage){
+            roll = rn.nextInt(10) + 1;
+            if (roll == 1){
+                damage[x] = 0;
+            } else if (roll >= 2 && roll < 4){
+                damage[x] = this.castDamage/2;
+            } else if (roll >= 4 && roll < 6) {
+                damage[x] = this.castDamage;
+            } else if (roll >= 6 && roll < 8) {
+                damage[x] = this.castDamage + (this.castDamage * roll/10);
+            } else if (roll >= 8) {
+                damage[x] = this.castDamage * 2;
+            }
+        }
+        return damage;
+    }
+
+    public int swing(){
+        System.out.println("Not implemented yet");
+        return 0;
+    }
+
+
+}
