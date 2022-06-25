@@ -10,6 +10,9 @@ public class Player {
 
     private int castDamage;
     private int armour;
+    private boolean poisoned;
+    private boolean burning;
+    private boolean necrosis;
 
     public Player() {
         this.level = 1;
@@ -77,6 +80,30 @@ public class Player {
         this.armour = armour;
     }
 
+    public boolean isPoisoned() {
+        return poisoned;
+    }
+
+    public void setPoisoned(boolean poisoned) {
+        this.poisoned = poisoned;
+    }
+
+    public boolean isBurning() {
+        return burning;
+    }
+
+    public void setBurning(boolean burning) {
+        this.burning = burning;
+    }
+
+    public boolean isNecrosis() {
+        return necrosis;
+    }
+
+    public void setNecrosis(boolean necrosis) {
+        this.necrosis = necrosis;
+    }
+
     /**
      * Chop is an attack that focuses damage on one target only, a dice roll determines if the attack hits and whether the player does any bonus damage to the target.
      * @return the attack damage against the enemy
@@ -107,7 +134,7 @@ public class Player {
         int roll;
         int[] damage = {0,0,0};
         for (int x : damage){
-            roll = rn.nextInt(10) + 1;
+            roll = 1;
             if (roll == 1){
                 damage[x] = 0;
             } else if (roll >= 2 && roll < 4){
