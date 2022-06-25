@@ -1,5 +1,7 @@
 public class Enemy {
-    public static String[] fireTypes = {"Draugr", "Fire Demons", "Smokestack"};
+    public int ID;
+
+    public static String[] fireTypes = {"Draugr", "Fire Demon", "Smokestack"};
     private int level;
     private int possibleHealth;
     private int health;
@@ -7,7 +9,8 @@ public class Enemy {
     private String name;
 
 
-    public Enemy(int level, int possibleHealth, int health, int baseDamage, String name) {
+    public Enemy(int ID, int level, int possibleHealth, int health, int baseDamage, String name) {
+        this.ID = ID;
         this.level = level;
         this.possibleHealth = possibleHealth;
         this.health = health;

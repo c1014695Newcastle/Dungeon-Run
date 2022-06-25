@@ -77,6 +77,10 @@ public class Player {
         this.armour = armour;
     }
 
+    /**
+     * Chop is an attack that focuses damage on one target only, a dice roll determines if the attack hits and whether the player does any bonus damage to the target.
+     * @return the attack damage against the enemy
+     */
     public int chop(){
         Random rn = new Random();
         int roll = rn.nextInt(10) + 1;
@@ -94,6 +98,10 @@ public class Player {
         return 0;
     }
 
+    /**
+     * Cast is an attack that can target two enemies at max, with three projectiles being aimed at the different enemies in the turn.
+     * @return the attack damage of all three separate casts
+     */
     public int[] cast(){
         Random rn = new Random();
         int roll;
@@ -115,6 +123,10 @@ public class Player {
         return damage;
     }
 
+    /**
+     * Swing targets all enemies on the board with an attack that is done to all enemies equally, very powerful against large groups of enemies
+     * @return the damage output of the swing
+     */
     public int swing(){
         System.out.println("Not implemented yet");
         return 0;
