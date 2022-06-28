@@ -12,6 +12,7 @@ public class Player {
     private int armour;
     private boolean poisoned;
     private boolean burning;
+    private int burningDamage;
     private boolean necrosis;
 
     public Player() {
@@ -22,6 +23,11 @@ public class Player {
         this.castDamage = 5;
         this.chopDamage = 15;
         this.swingDamage = 25;
+        this.armour = 0;
+        this.poisoned = false;
+        this.burning = false;
+        this.burningDamage = 0;
+        this.necrosis = false;
     }
 
     public int getLevel() {
