@@ -1,22 +1,27 @@
-public class Enemy {
-    public int ID;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    public static String[] fireTypes = {"Draugr", "Fire Demon", "Smokestack"};
+public class Enemy {
+    public  final static String[] fireTypes = {"Draugr", "Fire Demon", "Smokestack"};
+    public  final static String[] poisonTypes = {"Draugr", "Fire Demon", "Smokestack"};
+    public  final static String[] necroticTypes = {"Draugr", "Fire Demon", "Smokestack"};
+    public final int ID;
     private int level;
     private int possibleHealth;
     private int health;
     private int baseDamage;
     private String name;
+    private final String[] attacks;
 
 
-    public Enemy(int ID, int level, int possibleHealth, int health, int baseDamage, String name) {
+    public Enemy(int ID, int level, int possibleHealth, int health, int baseDamage, String name, String[] attacks) {
         this.ID = ID;
         this.level = level;
         this.possibleHealth = possibleHealth;
         this.health = health;
         this.baseDamage = baseDamage;
         this.name = name;
-
+        this. attacks = attacks;
     }
 
     public int getLevel() {
@@ -57,6 +62,13 @@ public class Enemy {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+
+        return "╔════════════════════════╗ \n" +
+                 "\tLevel " + level + " " + name + "\n"  + "\tHealth: " + health + "/" +  + possibleHealth + "\n"  + "╚════════════════════════╝ ";
     }
 }
 
