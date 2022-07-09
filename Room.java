@@ -74,14 +74,35 @@ public class Room {
     public void startEncounter(Player p){
         String choice;
         int damage;
-        while (!getEnemies().isEmpty()){
+        while (!getEnemies().isEmpty() && p.getHealth() > 0){
+            System.out.println(p.getHealth());
             for (Enemy e : getEnemies()){
                 System.out.println(e);
             }
             playerTurn(p);
-            //enemyTurn()
+            enemyTurns(p);
+            System.out.println(p.getHealth());
+            if (p.getHealth() < 0){
+                GameIO.playerDies();
+            }
         }
+
         //endEncounter(p);
+    }
+
+    private void enemyTurns(Player p){
+        int playerDamage = 0;
+        for (Enemy e : getEnemies()){
+            if (e.getName().equals("Draugr")){
+                playerDamage = e.draugrAttacks();
+            } else  if (e.getName().equals("Fire Demon")){
+                playerDamage = e.fireDemonAttacks();
+            } else {
+                playerDamage = e.smokestackAttacks();
+            }
+
+            p.setHealth(p.getHealth() - playerDamage);
+        }
     }
 
     private void playerTurn(Player p){

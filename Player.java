@@ -18,8 +18,8 @@ public class Player {
 
     public Player() {
         this.level = 1;
-        this.possibleHealth = 50;
-        this.health = 50;
+        this.possibleHealth = 100;
+        this.health = 100;
         this.armour = 0;
         this.castDamage = 5;
         this.chopDamage = 15;
