@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Player {
@@ -116,7 +117,7 @@ public class Player {
      */
     public int chop(){
         Random rn = new Random();
-        int roll = rn.nextInt(10) + 1;
+        int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
         if (roll == 1){
             return 0;
         } else if (roll >= 2 && roll < 4){
@@ -137,10 +138,10 @@ public class Player {
      */
     public int[] cast(){
         Random rn = new Random();
-        int roll;
-        int[] damage = {0,0,0};
-        for (int x : damage){
-            roll = 1;
+        int roll;;
+        int[] damage = {0,0,0};;
+        for (int x = 0; x < 3; x ++){
+            roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
             if (roll == 1){
                 damage[x] = 0;
             } else if (roll >= 2 && roll < 4){
@@ -162,6 +163,7 @@ public class Player {
      */
     public int swing(){
         System.out.println("Not implemented yet");
+        int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
         return 0;
     }
 

@@ -78,22 +78,28 @@ public class Room {
             for (Enemy e : getEnemies()){
                 System.out.println(e);
             }
-            choice = GameIO.playerChoice();
-            if (choice.equals("1")){
-                //damage = p.cast();
-            } else if (choice.equals("2")){
-                damage = p.chop();
-
-            } else {
-                damage = p.swing();
-            }
-
+            playerTurn(p);
+            //enemyTurn()
         }
         //endEncounter(p);
     }
 
-    private void playerTurn(){
+    private void playerTurn(Player p){
+        String choice;
+        int damage;
+        choice = GameIO.playerChoice();
+        if (choice.equals("1")){ // Cast
+            int[] castDamage = p.cast();
+            for (int x : castDamage){
+                Enemy enemytoDamage = GameIO.castChoice(x, getEnemies());
+                enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
+            }
+        } else if (choice.equals("2")){ // Chop
+            damage = p.chop();
 
+        } else { // Swing
+            damage = p.swing();
+        }
     }
 
 
