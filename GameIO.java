@@ -65,8 +65,16 @@ public class GameIO {
         System.out.println("\n" + enemy + " uses " + attack + "!\n");
     }
 
-    public static void damageReport(int damage){
-        System.out.println("YOU TAKE " + damage + "!\n\n");
+    public static void enemyDies(String enemyName){
+        System.out.println("\nYOU KILL THE " + enemyName + "!\n");
+    }
+
+    public static void damageReport(int damage, boolean poisoned){
+        if (!poisoned) {
+            System.out.println("YOU TAKE " + damage + "!\n\n");
+        } else {
+            System.out.println("YOU TAKE " + damage + " AND ARE POISONED!");
+        }
     }
 
     public static int playerRoll(boolean poisoned, boolean necrosis, boolean burned ){

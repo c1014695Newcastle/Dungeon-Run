@@ -75,13 +75,11 @@ public class Room {
         String choice;
         int damage;
         while (!getEnemies().isEmpty() && p.getHealth() > 0){
-            System.out.println(p.getHealth());
             for (Enemy e : getEnemies()){
                 System.out.println(e);
             }
             playerTurn(p);
             enemyTurns(p);
-            System.out.println(p.getHealth());
             if (p.getHealth() < 0){
                 GameIO.playerDies();
             }
@@ -100,7 +98,7 @@ public class Room {
             } else {
                 playerDamage = e.smokestackAttacks();
             }
-            GameIO.damageReport(playerDamage);
+            GameIO.damageReport(playerDamage, p.isPoisoned());
             p.setHealth(p.getHealth() - playerDamage);
         }
     }
@@ -115,6 +113,10 @@ public class Room {
                 Enemy enemytoDamage = GameIO.castChoice(x, getEnemies());
                 assert enemytoDamage != null;
                 enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
+                if (enemytoDamage.getHealth() <= 0){
+                    GameIO.enemyDies(enemytoDamage.getName());
+                    this.getEnemies().remove(enemytoDamage);
+                }
             }
         } else if (choice.equals("2")){ // Chop
             damage = p.chop();
