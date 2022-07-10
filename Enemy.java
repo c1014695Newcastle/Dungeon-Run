@@ -102,6 +102,7 @@ public class Enemy {
         } else if (roll >= 6 && roll < 8) {
             return this.baseDamage+ (this.baseDamage * roll/10);
         } else if (roll >= 8) {
+            p.setDebuffCounter(3);
             p.setPoisoned(true);
             return this.baseDamage * 2;
         }
@@ -121,6 +122,7 @@ public class Enemy {
             return this.baseDamage + 5;
         } else if (roll >= 8) {
             p.setPoisoned(true);
+            p.setDebuffCounter(3);
             return this.baseDamage + 7;
         }
         return 0;
@@ -181,12 +183,8 @@ public class Enemy {
         }
     }
 
-
-
-
     @Override
     public String toString() {
-
         return "╔════════════════════════╗ \n" +
                  "\tLevel " + level + " " + name + "\n"  + "\tHealth: " + health + "/" +  + possibleHealth + "\n"  + "╚════════════════════════╝ ";
     }

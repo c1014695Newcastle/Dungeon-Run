@@ -13,7 +13,7 @@ public class Player {
     private int armour;
     private boolean poisoned;
     private boolean burning;
-    private int burningDamage;
+    private int debuffCounter;
     private boolean necrosis;
 
     public Player() {
@@ -27,7 +27,7 @@ public class Player {
         this.armour = 0;
         this.poisoned = false;
         this.burning = false;
-        this.burningDamage = 0;
+        this.debuffCounter = 0;
         this.necrosis = false;
     }
 
@@ -111,6 +111,21 @@ public class Player {
         this.necrosis = necrosis;
     }
 
+    public int getDebuffCounter() {
+        return debuffCounter;
+    }
+
+    public void setDebuffCounter(int debuffCounter) {
+        this.debuffCounter = debuffCounter;
+    }
+
+    public void removeDebuffs(){
+        this.poisoned = false;
+        this.burning = false;
+        this.necrosis = false;
+        this.debuffCounter = 0;
+    }
+
     /**
      * Chop is an attack that focuses damage on one target only, a dice roll determines if the attack hits and whether the player does any bonus damage to the target.
      * @return the attack damage against the enemy
@@ -165,6 +180,13 @@ public class Player {
         System.out.println("Not implemented yet");
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
         return 0;
+    }
+
+    @Override
+    public String toString(){
+        return "╔═══《✧》═══╗ \n  Player\n" +
+                "  " + health + "/" + possibleHealth + "\n" +
+        "╚═══《✧》═══╝";
     }
 
 

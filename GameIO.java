@@ -19,8 +19,7 @@ public class GameIO {
                     3 - Swing
                     
                 > """);
-        String choice = choiceIO(3);
-        return choice;
+        return choiceIO(3);
     }
 
     public static Enemy castChoice(int damage, ArrayList<Enemy> enemies){
@@ -77,21 +76,32 @@ public class GameIO {
         }
     }
 
-    public static int playerRoll(boolean poisoned, boolean necrosis, boolean burned ){
+    public static void sleep(){
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static int playerRoll(boolean poisoned, boolean burning, boolean necrosis){
         System.out.print("Press enter to roll the dice");
         Scanner s = new Scanner(System.in);
         String place = s.nextLine();
         Random rn = new Random();
         int rollOne = rn.nextInt(10) + 1;
         int rollTwo = rn.nextInt(10) + 1;
-
+        sleep();
         System.out.format("""
                 
                 You Rolled:
                 
                 ╔═══════════════╗ ╔═══════════════╗
                         %d                %d
-                ╚═══════════════╝ ╚═══════════════╝ 
+                ╚═══════════════╝ ╚═══════════════╝
        
                  """, rollOne,rollTwo);
         // Check for conditions to affect dice roll;
@@ -107,6 +117,9 @@ public class GameIO {
     }
 
 
+    public static void reportClearing(){
+        System.out.println("\nYou feel your strength returning to you - DEBUFFS CLEARED\n");
+    }
 
     public static void main(String[] args) {
         playerRoll(true, false, false);

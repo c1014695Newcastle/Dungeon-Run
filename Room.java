@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Room {
     private ArrayList<Enemy> enemies;
@@ -75,15 +76,24 @@ public class Room {
         String choice;
         int damage;
         while (!getEnemies().isEmpty() && p.getHealth() > 0){
+            System.out.println(p);
             for (Enemy e : getEnemies()){
                 System.out.println(e);
             }
+            if ((p.isPoisoned() || p.isBurning() || p.isNecrosis()) && p.getDebuffCounter() == 0){
+                p.removeDebuffs();
+                GameIO.reportClearing();
+            }
+            GameIO.sleep();
             playerTurn(p);
+            GameIO.sleep();
             enemyTurns(p);
-            if (p.getHealth() < 0){
+            GameIO.sleep();
+            if (p.getHealth() <= 0){
                 GameIO.playerDies();
             }
         }
+        System.out.println("ENCOUNTER CLEARED");
 
         //endEncounter(p);
     }
