@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -60,7 +61,13 @@ public class GameIO {
         } else return Integer.parseInt(choice) > numOfChoices;
     }
 
+    public static void reportAttack(String enemy, String attack){
+        System.out.println("\n" + enemy + " uses " + attack + "!\n");
+    }
 
+    public static void damageReport(int damage){
+        System.out.println("YOU TAKE " + damage + "!\n\n");
+    }
 
     public static int playerRoll(boolean poisoned, boolean necrosis, boolean burned ){
         System.out.print("Press enter to roll the dice");

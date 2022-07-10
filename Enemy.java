@@ -74,20 +74,23 @@ public class Enemy {
         this.name = name;
     }
 
-    public int draugrAttacks() {
+    public int draugrAttacks(Player p) {
         Random rn = new Random();
         String[] attacks = getAttacks();
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Chop")){
-            return draugrChop();
+            GameIO.reportAttack("Draugr", "Chop");
+            return draugrChop(p);
         } else if (attack.equals("Swing")){
-            return draugrSwing();
+            GameIO.reportAttack("Draugr", "Swing");
+            return draugrSwing(p);
         } else {
+            GameIO.reportAttack("Draugr", "Bash");
             return draugrBash();
         }
     }
 
-    private int draugrChop(){
+    private int draugrChop(Player p){
         Random rn = new Random();
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
@@ -99,12 +102,13 @@ public class Enemy {
         } else if (roll >= 6 && roll < 8) {
             return this.baseDamage+ (this.baseDamage * roll/10);
         } else if (roll >= 8) {
+            p.setPoisoned(true);
             return this.baseDamage * 2;
         }
         return 0;
     }
 
-    private int draugrSwing() {
+    private int draugrSwing(Player p) {
         Random rn = new Random();
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
@@ -116,6 +120,7 @@ public class Enemy {
         } else if (roll >= 6 && roll < 8) {
             return this.baseDamage + 5;
         } else if (roll >= 8) {
+            p.setPoisoned(true);
             return this.baseDamage + 7;
         }
         return 0;
@@ -168,11 +173,11 @@ public class Enemy {
         String[] attacks = getAttacks();
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Spit")){
-            return draugrChop();
+            return 0;
         } else if (attack.equals("Bite")){
-            return draugrSwing();
+            return 0;
         } else {
-            return draugrBash();
+            return 0;
         }
     }
 

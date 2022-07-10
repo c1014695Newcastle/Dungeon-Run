@@ -94,13 +94,13 @@ public class Room {
         int playerDamage = 0;
         for (Enemy e : getEnemies()){
             if (e.getName().equals("Draugr")){
-                playerDamage = e.draugrAttacks();
+                playerDamage = e.draugrAttacks(p);
             } else  if (e.getName().equals("Fire Demon")){
                 playerDamage = e.fireDemonAttacks();
             } else {
                 playerDamage = e.smokestackAttacks();
             }
-
+            GameIO.damageReport(playerDamage);
             p.setHealth(p.getHealth() - playerDamage);
         }
     }
@@ -113,6 +113,7 @@ public class Room {
             int[] castDamage = p.cast();
             for (int x : castDamage){
                 Enemy enemytoDamage = GameIO.castChoice(x, getEnemies());
+                assert enemytoDamage != null;
                 enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
             }
         } else if (choice.equals("2")){ // Chop
