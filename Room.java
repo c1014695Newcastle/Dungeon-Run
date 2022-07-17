@@ -72,12 +72,16 @@ public class Room {
         return enemies;
     }
 
+    /**
+     * Method to start and run the encounter in the room with the player, runs until the list of enemies is empty
+     * @param p the player character
+     */
     public void startEncounter(Player p){
         String choice;
         int damage;
-        while (!getEnemies().isEmpty() && p.getHealth() > 0){
+        while (!enemies.isEmpty() && p.getHealth() > 0){
             System.out.println(p);
-            for (Enemy e : getEnemies()){
+            for (Enemy e : enemies){
                 System.out.println(e);
             }
             if ((p.isPoisoned() || p.isBurning() || p.isNecrosis()) && p.getDebuffCounter() == 0){
@@ -100,7 +104,7 @@ public class Room {
 
     private void enemyTurns(Player p){
         int playerDamage = 0;
-        for (Enemy e : getEnemies()){
+        for (Enemy e : enemies){
             if (e.getName().equals("Draugr")){
                 playerDamage = e.draugrAttacks(p);
             } else  if (e.getName().equals("Fire Demon")){
