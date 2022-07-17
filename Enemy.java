@@ -12,6 +12,7 @@ public class Enemy {
     private int health;
     private int baseDamage;
     private String name;
+    private int xp;
 
     public int getID() {
         return ID;
@@ -24,7 +25,7 @@ public class Enemy {
     private final String[] attacks;
 
 
-    public Enemy(int ID, int level, int possibleHealth, int health, int baseDamage, String name, String[] attacks) {
+    public Enemy(int ID, int level, int possibleHealth, int health, int baseDamage, String name, String[] attacks, int xp) {
         this.ID = ID;
         this.level = level;
         this.possibleHealth = possibleHealth;
@@ -32,6 +33,7 @@ public class Enemy {
         this.baseDamage = baseDamage;
         this.name = name;
         this. attacks = attacks;
+        this.xp = xp;
     }
 
     public int getLevel() {
@@ -40,6 +42,15 @@ public class Enemy {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 
     public int getPossibleHealth() {

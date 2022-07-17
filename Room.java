@@ -56,15 +56,15 @@ public class Room {
                 int level = rn.nextInt(5) + 1;
                 if (name.equals("Draugr")) {
                     String[] attacks = {"Chop", "Swing", "Bash"};
-                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 10, 15 +level * 10, level * 5, name, attacks);
+                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 10, 15 +level * 10, level * 5, name, attacks, level * 10);
                     enemies.add(enemy);
                 } else if (name.equals("Fire Demon")){
                     String[] attacks = {"Spit", "Bite", "Blind"};
-                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 10, name, attacks);
+                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 10, name, attacks, level * 10);
                     enemies.add(enemy);
                 } else {
                     String[] attacks = {"Smoke", "Crush", "Burn"};
-                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 10, name, attacks);
+                    Enemy enemy = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 10, name, attacks, level * 10);
                     enemies.add(enemy);
                 }
             }
@@ -124,7 +124,8 @@ public class Room {
                 assert enemytoDamage != null;
                 enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
                 if (enemytoDamage.getHealth() <= 0){
-                    GameIO.enemyDies(enemytoDamage.getName());
+                    p.setXp(p.getXp() + enemytoDamage.getXp());
+                    GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
                     this.getEnemies().remove(enemytoDamage);
                 }
             }
@@ -134,6 +135,25 @@ public class Room {
         } else { // Swing
             damage = p.swing();
         }
+    }
+
+    private String translateDifficulty(int difficulty){
+        String diff = "";
+        if (difficulty == 0){
+            diff = "Empty";
+        } else if (difficulty == 1){
+            diff = "Easy ";
+        } else if (difficulty == 2) {
+            diff = "Med  ";
+        } else if (difficulty == 3){
+            diff = "Hard ";
+        } else {
+            diff = "BLOCK";
+        }
+        return diff;
+    }
+    public String toString(){
+        return "[ " + type + " " + translateDifficulty(difficulty) + " ]";
     }
 
 

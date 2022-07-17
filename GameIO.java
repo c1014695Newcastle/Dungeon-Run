@@ -1,8 +1,4 @@
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class GameIO {
 
@@ -64,8 +60,8 @@ public class GameIO {
         System.out.println("\n" + enemy + " uses " + attack + "!\n");
     }
 
-    public static void enemyDies(String enemyName){
-        System.out.println("\nYOU KILL THE " + enemyName + "!\n");
+    public static void enemyDies(String enemyName, int xp){
+        System.out.println("\nYOU KILL THE " + enemyName.toUpperCase(Locale.ROOT) + "!\n GAIN " + xp + " XP!\n");
     }
 
     public static void damageReport(int damage, boolean poisoned){
@@ -85,6 +81,14 @@ public class GameIO {
         {
             Thread.currentThread().interrupt();
         }
+    }
+    
+    private static void reportLevelUp(int newLevel, int diff){
+        System.out.println("YOU GAINED " + diff + " LEVELS\n");
+        sleep();
+        System.out.println("\nYOU ARE NOW LEVEL " + newLevel);
+        System.out.println("\tHEALTH +" + (newLevel * 10));
+        System.out.println("\tCAST DAMAGE +" + (newLevel * 5) + "\n\tCHOP DAMAGE +" + (newLevel * 5) + "\n\tSWING DAMAGE +" + (newLevel * 5) + "\n");
     }
 
     public static int playerRoll(boolean poisoned, boolean burning, boolean necrosis){
@@ -122,6 +126,6 @@ public class GameIO {
     }
 
     public static void main(String[] args) {
-        playerRoll(true, false, false);
+        reportLevelUp(3,2);
     }
 }

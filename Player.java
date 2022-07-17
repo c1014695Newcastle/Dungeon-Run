@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class Player {
     private int level;
@@ -15,8 +16,10 @@ public class Player {
     private boolean burning;
     private int debuffCounter;
     private boolean necrosis;
+    private int xp;
 
     public Player() {
+        this.xp = 0;
         this.level = 1;
         this.possibleHealth = 100;
         this.health = 100;
@@ -33,6 +36,14 @@ public class Player {
 
     public int getLevel() {
         return level;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 
     public int getPossibleHealth() {
@@ -182,6 +193,15 @@ public class Player {
         return 0;
     }
 
+    private void checkLevel(){
+        int newLevel = xp % 100;
+        if (newLevel > level){
+            int diff = newLevel - level;
+            //upgradePlayer(diff);
+
+            //GameIO.reportLevelUp(newLevel, diff);
+        }
+    }
     @Override
     public String toString(){
         return "╔═══《✧》═══╗ \n  Player\n" +
