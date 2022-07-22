@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Player {
+    private String name;
     private int level;
     private int possibleHealth;
     private int health;
@@ -18,7 +19,8 @@ public class Player {
     private boolean necrosis;
     private int xp;
 
-    public Player() {
+    public Player(String name) {
+        this.name = name;
         this.xp = 0;
         this.level = 1;
         this.possibleHealth = 100;
@@ -32,6 +34,14 @@ public class Player {
         this.burning = false;
         this.debuffCounter = 0;
         this.necrosis = false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getLevel() {
@@ -190,8 +200,9 @@ public class Player {
 
 
     public void levelUp(){
-        int newLevel = xp % 100;
+        int newLevel = xp /= 100;
         if (newLevel > level){
+            GameIO.reportLevelUp(newLevel, newLevel - level);
             setHealth(getHealth() + ((newLevel - level) * 10));
             setPossibleHealth(getHealth());
             setCastDamage(getCastDamage() + ((newLevel - level) * 5));
@@ -203,7 +214,7 @@ public class Player {
 
     @Override
     public String toString(){
-        return "╔═══《✧》═══╗ \n  Player\n" +
+        return "╔═══《✧》═══╗ \n  " + name + "\n" +
                 "  " + health + "/" + possibleHealth + "\n" +
         "╚═══《✧》═══╝";
     }

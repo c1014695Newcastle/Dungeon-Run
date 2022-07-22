@@ -1,4 +1,5 @@
 import Enums.FireEnemies;
+import Enums.PoisonEnemies;
 import Enums.Types;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class Room {
     private Types type;
 
 
-    public Room(int ID, int difficulty, Types type) {
+    public Room(int ID, int difficulty, Types type, int numOfEnemies) {
         this.ID = ID;
         this.difficulty = difficulty;
         this.type = type;
@@ -63,12 +64,11 @@ public class Room {
         Random rn = new Random();
         ArrayList<Enemy> enemies = new ArrayList<>();
         for (int x = 0; x < numOfEnemies; x++) {
+            int level = rn.nextInt(5) + 1;
+            String[] attacks;
             switch(type){
                 case FIRE:
-                    //fireType name = Enemy.fireTypes[rn.nextInt(Enemy.fireTypes.length)];
                     FireEnemies name = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
-                    int level = rn.nextInt(5) + 1;
-                    String[] attacks;
                     switch (name) {
                         case FIRE_DRAUGR:
                             attacks = new String[]{"Chop", "Swing", "Bash"};
@@ -77,21 +77,20 @@ public class Room {
                             break;
                         case FIRE_DEMON:
                             attacks = new String[]{"Spit", "Bite", "Blind"};
-                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 10, name.toString(), attacks, level * 10);
+                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 5, name.toString(), attacks, level * 10);
                             enemies.add(fireDemon);
                             break;
                         case SMOKESTACK:
                             attacks = new String[]{"Smoke", "Crush", "Burn"};
-                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 10, name.toString(), attacks, level * 10);
+                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 5, name.toString(), attacks, level * 10);
                             enemies.add(smokestack);
                             break;
                     }
                     break;
                 case POISON:
-                    System.out.println("NOT READY");
+
                     break;
                 case NECROTIC:
-                    System.out.println("NOT READY");
                     break;
             }
         }
@@ -103,8 +102,6 @@ public class Room {
      * @param p the player character
      */
     public void startEncounter(Player p){
-        String choice;
-        int damage;
         while (!enemies.isEmpty() && p.getHealth() > 0){
             System.out.println(p);
             for (Enemy e : enemies){
@@ -123,11 +120,16 @@ public class Room {
                 GameIO.playerDies();
             }
         }
-        System.out.println("ENCOUNTER CLEARED");
-
-        endEncounter(p);
+        if (p.getHealth() > 0) {
+            System.out.println("ENCOUNTER CLEARED");
+            endEncounter(p);
+        }
     }
 
+    /**
+     * Method to allow the enemies on the board to make their turn, selects the appropriate enemy attack selector based on what type the enemy is
+     * @param p the player to damage
+     */
     private void enemyTurns(Player p){
         int playerDamage = 0;
         for (Enemy e : enemies){

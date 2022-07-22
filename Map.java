@@ -1,6 +1,7 @@
 import Enums.Types;
 
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -28,43 +29,43 @@ public class Map {
                 int randNum = ran.nextInt(4) + 1;
                 if (y == 0 || y == 1) {
                     if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.FIRE);
+                        Room r = new Room(ID, 0, Types.FIRE, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.FIRE);
+                        Room r = new Room(ID, 4, Types.FIRE, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else {
-                        Room r = new Room(ID, 1, Types.FIRE);
+                        Room r = new Room(ID, 1, Types.FIRE, 3);
                         rooms[x][y] = r;
                         ID++;
                     }
                 } else if (y == 2) {
                     if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.POISON);
+                        Room r = new Room(ID, 0, Types.POISON, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.POISON);
+                        Room r = new Room(ID, 4, Types.POISON, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else {
-                        Room r = new Room(ID, 2, Types.POISON);
+                        Room r = new Room(ID, 2, Types.POISON, 4);
                         rooms[x][y] = r;
                         ID++;
                     }
                 } else {
                     if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.NECROTIC);
+                        Room r = new Room(ID, 0, Types.NECROTIC, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.NECROTIC);
+                        Room r = new Room(ID, 4, Types.NECROTIC, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else {
-                        Room r = new Room(ID, 3, Types.NECROTIC);
+                        Room r = new Room(ID, 3, Types.NECROTIC, 5);
                         rooms[x][y] = r;
                         ID++;
                     }
@@ -109,33 +110,53 @@ public class Map {
         return true;
     }
 
+    private int checkRoom(Room r){
+        for (int x = 0; x < 4; x++){
+            for (int y = 0; y < 4; y++){
+                if (rooms[x][y].getID() == r.getID()){
+                    return x;
+                }
+            }
+        }
+        return 0;
+    }
+
    public void mapProgression(Player p){
         int x = 0, y = 0;
-        while (x != 4){
-            Room r = getRooms()[x][y];
+        Room r = rooms[x][y];
+        while (x != 4 && p.getHealth() > 0){
             r.startEncounter(p);
-            Room[] validRooms = checkValidRooms(r);
+            if (p.getHealth() <= 0){
+                break;
+            } else {
+                x = checkRoom(r);
+                Types roomtype = r.getType();
+                Room[] validRooms = checkValidRooms(r);
+                r = GameIO.pickRoom(validRooms);
+                if (roomtype != r.getType()) {
+                    System.out.println("boss encounter place");
+                }
+            }
         }
    }
 
    private Room[] checkValidRooms(Room r) {
-        int ID = 0;
        Room[] validRooms = new Room[4];
        for (int x = 0; x < 4; x++) {
            for (int y = 0; y < 4; y++) {
                if (r.getID() == rooms[x][y].getID()) {
                    if (isLegal(x + 1, y)) {
-                       validRooms[ID] = rooms[x + 1][y];
-                       ID++;
+                       //Right
+                       validRooms[0] = rooms[x + 1][y];
                    } else if (isLegal(x - 1, y)) {
-                       validRooms[ID] = rooms[x - 1][y];
-                       ID++;
+                       //Left
+                       validRooms[1] = rooms[x - 1][y];
                    } else if (isLegal(x, y + 1)) {
-                       validRooms[ID] = rooms[x][y + 1];
-                       ID++;
+                       //Up
+                       validRooms[2] = rooms[x][y + 1];
                    } else if (isLegal(x, y - 1)) {
-                       validRooms[ID] = rooms[x][y - 1];
-                       ID++;
+                       //Down
+                       validRooms[3] = rooms[x][y - 1];
                    }
                }
            }
