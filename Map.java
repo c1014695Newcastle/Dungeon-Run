@@ -1,5 +1,6 @@
+import Enums.Types;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -21,59 +22,67 @@ public class Map {
     private Room[][] generateMap(){
         Random ran = new Random();
         Room[][] rooms = new Room[5][5];
-        for (int x = 0; x < 5; x++){
-            for (int y = 0; y < 5; y++){
+        int ID = 0;
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
                 int randNum = ran.nextInt(4) + 1;
                 if (y == 0 || y == 1) {
-                    if (randNum == 3 || randNum == 4){
-                        Room r = new Room(0, "Flame");
+                    if (randNum == 3 || randNum == 4) {
+                        Room r = new Room(ID, 0, Types.FIRE);
                         rooms[x][y] = r;
-                    } else if (randNum == 1){
-                        Room r = new Room(4, "Flame");
+                        ID++;
+                    } else if (randNum == 1) {
+                        Room r = new Room(ID, 4, Types.FIRE);
                         rooms[x][y] = r;
+                        ID++;
                     } else {
-                        Room r = new Room(1, "Flame");
+                        Room r = new Room(ID, 1, Types.FIRE);
                         rooms[x][y] = r;
+                        ID++;
                     }
                 } else if (y == 2) {
-                    if (randNum == 3 || randNum == 4){
-                        Room r = new Room(0, "Poison");
+                    if (randNum == 3 || randNum == 4) {
+                        Room r = new Room(ID, 0, Types.POISON);
                         rooms[x][y] = r;
-                    } else if (randNum == 1){
-                        Room r = new Room(4, "Poison");
+                        ID++;
+                    } else if (randNum == 1) {
+                        Room r = new Room(ID, 4, Types.POISON);
                         rooms[x][y] = r;
+                        ID++;
                     } else {
-                        Room r = new Room(2, "Poison");
+                        Room r = new Room(ID, 2, Types.POISON);
                         rooms[x][y] = r;
+                        ID++;
                     }
                 } else {
-                    if (randNum == 3 || randNum == 4){
-                        Room r = new Room(0, "Necrosis");
+                    if (randNum == 3 || randNum == 4) {
+                        Room r = new Room(ID, 0, Types.NECROTIC);
                         rooms[x][y] = r;
-                    } else if (randNum == 1){
-                        Room r = new Room(4, "Necrosis");
+                        ID++;
+                    } else if (randNum == 1) {
+                        Room r = new Room(ID, 4, Types.NECROTIC);
                         rooms[x][y] = r;
+                        ID++;
                     } else {
-                        Room r = new Room(3, "Necrosis");
+                        Room r = new Room(ID, 3, Types.NECROTIC);
                         rooms[x][y] = r;
+                        ID++;
                     }
                 }
-
             }
         }
         return rooms;
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i ++) {
-            String timeStamp = new SimpleDateFormat("yyyy/MM/dd - HH:mm.ss").format(Calendar.getInstance().getTime());
-            System.out.println("MAP CHECK TESTS " + timeStamp);
-            System.out.println(i + "\n\n");
-            Map m = new Map();
-            System.out.println(m);
-            Room[][] r = m.getRooms();
-            System.out.println(m.checkMap(0,0));
-        }
+        String timeStamp = new SimpleDateFormat("yyyy/MM/dd - HH:mm.ss").format(Calendar.getInstance().getTime());
+        System.out.println("MAP CHECK TESTS " + timeStamp);
+        System.out.println("\n\n");
+        Map m = new Map();
+        System.out.println(m);
+        Room[][] r = m.getRooms();
+        System.out.println(m.checkMap(0,0));
+        System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
     }
 
     private boolean isLegal(int x, int y){
@@ -99,6 +108,41 @@ public class Map {
         }
         return true;
     }
+
+   public void mapProgression(Player p){
+        int x = 0, y = 0;
+        while (x != 4){
+            Room r = getRooms()[x][y];
+            r.startEncounter(p);
+            Room[] validRooms = checkValidRooms(r);
+        }
+   }
+
+   private Room[] checkValidRooms(Room r) {
+        int ID = 0;
+       Room[] validRooms = new Room[4];
+       for (int x = 0; x < 4; x++) {
+           for (int y = 0; y < 4; y++) {
+               if (r.getID() == rooms[x][y].getID()) {
+                   if (isLegal(x + 1, y)) {
+                       validRooms[ID] = rooms[x + 1][y];
+                       ID++;
+                   } else if (isLegal(x - 1, y)) {
+                       validRooms[ID] = rooms[x - 1][y];
+                       ID++;
+                   } else if (isLegal(x, y + 1)) {
+                       validRooms[ID] = rooms[x][y + 1];
+                       ID++;
+                   } else if (isLegal(x, y - 1)) {
+                       validRooms[ID] = rooms[x][y - 1];
+                       ID++;
+                   }
+               }
+           }
+       }
+       System.out.println(validRooms);
+       return validRooms;
+   }
 
 
     public String toString() {

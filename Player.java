@@ -25,8 +25,8 @@ public class Player {
         this.health = 100;
         this.armour = 0;
         this.castDamage = 5;
-        this.chopDamage = 15;
-        this.swingDamage = 25;
+        this.chopDamage = 25;
+        this.swingDamage = 35;
         this.armour = 0;
         this.poisoned = false;
         this.burning = false;
@@ -144,18 +144,7 @@ public class Player {
     public int chop(){
         Random rn = new Random();
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
-        if (roll == 1){
-            return 0;
-        } else if (roll >= 2 && roll < 4){
-            return this.chopDamage/2;
-        } else if (roll >= 4 && roll < 6) {
-            return this.chopDamage;
-        } else if (roll >= 6 && roll < 8) {
-            return this.chopDamage + (this.chopDamage * roll/10);
-        } else if (roll >= 8) {
-            return this.chopDamage * 2;
-        }
-        return 0;
+        return damageDecider(chopDamage, roll);
     }
 
     /**
@@ -168,17 +157,7 @@ public class Player {
         int[] damage = {0,0,0};;
         for (int x = 0; x < 3; x ++){
             roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
-            if (roll == 1){
-                damage[x] = 0;
-            } else if (roll >= 2 && roll < 4){
-                damage[x] = this.castDamage/2;
-            } else if (roll >= 4 && roll < 6) {
-                damage[x] = this.castDamage;
-            } else if (roll >= 6 && roll < 8) {
-                damage[x] = this.castDamage + (this.castDamage * roll/10);
-            } else if (roll >= 8) {
-                damage[x] = this.castDamage * 2;
-            }
+            damage[x] = damageDecider(castDamage, roll);
         }
         return damage;
     }
@@ -190,18 +169,38 @@ public class Player {
     public int swing(){
         System.out.println("Not implemented yet");
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
+        return damageDecider(swingDamage, roll);
+    }
+
+    private int damageDecider(int baseDamage, int roll){
+        if (roll == 1){
+            return 0;
+        } else if (roll >= 2 && roll < 4){
+            return baseDamage/2;
+        } else if (roll >= 4 && roll < 6) {
+            return baseDamage;
+        } else if (roll >= 6 && roll < 8) {
+            return baseDamage + (baseDamage * roll/10);
+        } else if (roll >= 8) {
+            return baseDamage * 2;
+        }
         return 0;
     }
 
-    private void checkLevel(){
+
+
+    public void levelUp(){
         int newLevel = xp % 100;
         if (newLevel > level){
-            int diff = newLevel - level;
-            //upgradePlayer(diff);
-
-            //GameIO.reportLevelUp(newLevel, diff);
+            setHealth(getHealth() + ((newLevel - level) * 10));
+            setPossibleHealth(getHealth());
+            setCastDamage(getCastDamage() + ((newLevel - level) * 5));
+            setChopDamage(getChopDamage() + ((newLevel - level) * 5));
+            setSwingDamage(getSwingDamage() + ((newLevel - level) * 5));
+            setLevel(level);
         }
     }
+
     @Override
     public String toString(){
         return "╔═══《✧》═══╗ \n  Player\n" +

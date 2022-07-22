@@ -1,3 +1,5 @@
+import Enums.FireEnemies;
+
 import java.util.*;
 
 public class GameIO {
@@ -18,7 +20,22 @@ public class GameIO {
         return choiceIO(3);
     }
 
-    public static Enemy castChoice(int damage, ArrayList<Enemy> enemies){
+    public static Enemy damageChoice(int damage, ArrayList<Enemy> enemies){
+        System.out.println("Select an enemy to do " + damage + " damage to:");
+        for (int x = 0; x < enemies.size(); x ++) {
+            System.out.println("\t" + (x + 1) + " " + enemies.get(x).getName() + " - " + enemies.get(x).getHealth());
+        }
+        String choice = choiceIO(enemies.size());
+        for (int x = 0; x < enemies.size(); x++){
+            if (x == Integer.parseInt(choice) - 1){
+                System.out.println("\nYou do " + damage + " to the " + enemies.get(x).getName() + "\n");
+                return enemies.get(x);
+            }
+        }
+        return null;
+    }
+
+    public static Enemy chopChoice(int damage, ArrayList<Enemy> enemies){
         System.out.println("Select an enemy to do " + damage + " damage to:");
         for (int x = 0; x < enemies.size(); x ++) {
             System.out.println("\t" + (x + 1) + " " + enemies.get(x).getName() + " - " + enemies.get(x).getHealth());
@@ -61,7 +78,7 @@ public class GameIO {
     }
 
     public static void enemyDies(String enemyName, int xp){
-        System.out.println("\nYOU KILL THE " + enemyName.toUpperCase(Locale.ROOT) + "!\n GAIN " + xp + " XP!\n");
+        System.out.println("\nYOU KILL THE " + enemyName.toString() + "!\n GAIN " + xp + " XP!\n");
     }
 
     public static void damageReport(int damage, boolean poisoned){
