@@ -82,6 +82,8 @@ public class Enemy {
         this.name = name;
     }
 
+
+
     public int draugrAttacks(Player p) {
         Random rn = new Random();
         String[] attacks = getAttacks();
@@ -107,7 +109,7 @@ public class Enemy {
         } else if (roll >= 4 && roll < 6) {
             return baseDamage;
         } else if (roll >= 6 && roll < 8) {
-            return this.baseDamage+ (baseDamage * roll/10);
+            return this.baseDamage + (baseDamage * roll/10);
         } else if (roll >= 8) {
             p.setDebuffCounter(3);
             p.setPoisoned(true);
@@ -150,28 +152,66 @@ public class Enemy {
         return 0;
     }
 
-    public int fireDemonAttacks() {
+    public int fireDemonAttacks(Player p) {
         Random rn = new Random();
         String[] attacks = getAttacks();
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Spit")){
-            return demonSpit();
+            return demonSpit(rn);
         } else if (attack.equals("Bite")){
-            return demonBite();
+            return demonBite(rn);
         } else {
-            return demonBurn();
+            return demonBurn(rn, p);
         }
     }
 
-    private int demonSpit() {
+    private int demonSpit(Random rn) {
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll >= 2 && roll < 4){
+            return baseDamage;
+        } else if (roll >= 4 && roll < 6) {
+            return baseDamage + 2;
+        } else if (roll >= 6 && roll < 8) {
+            return baseDamage + 5;
+        } else if (roll >= 8) {
+            return baseDamage + 7;
+        }
         return 0;
     }
 
-    private int demonBite() {
+    private int demonBite(Random rn) {
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll >= 2 && roll < 4){
+            return baseDamage;
+        } else if (roll >= 4 && roll < 6) {
+            return baseDamage + 2;
+        } else if (roll >= 6 && roll < 8) {
+            return baseDamage + 5;
+        } else if (roll >= 8) {
+            return baseDamage + 7;
+        }
         return 0;
     }
 
-    private int demonBurn() {
+    private int demonBurn(Random rn, Player p) {
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll >= 2 && roll < 4){
+            return baseDamage;
+        } else if (roll >= 4 && roll < 6) {
+            return baseDamage + 2;
+        } else if (roll >= 6 && roll < 8) {
+            return baseDamage + 5;
+        } else if (roll >= 8) {
+            p.setPoisoned(true);
+            p.setDebuffCounter(3);
+            return baseDamage + 7;
+        }
         return 0;
     }
 
@@ -190,8 +230,11 @@ public class Enemy {
 
     @Override
     public String toString() {
-        return "╔════════════════════════╗ \n" +
-                 "\tLevel " + level + " " + name + "\n"  + "\tHealth: " + health + "/" +  + possibleHealth + "\n"  + "╚════════════════════════╝ ";
+        String healthBar = GameIO.playerHealthBar(health, possibleHealth);
+        String topBar = GameIO.topBorder(healthBar.length()*2);
+        String bottomBar = GameIO.bottomBorder(healthBar.length()*2);
+        return topBar +
+                 "\tLevel " + level + " " + name + "\n"  + "\tHealth: " + healthBar + "\n"  +bottomBar;
     }
 }
 

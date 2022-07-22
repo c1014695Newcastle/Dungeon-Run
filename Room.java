@@ -72,17 +72,17 @@ public class Room {
                     switch (name) {
                         case FIRE_DRAUGR:
                             attacks = new String[]{"Chop", "Swing", "Bash"};
-                            Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 5, name.toString(), attacks, level * 10);
+                            Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
                             enemies.add(fireDraugr);
                             break;
                         case FIRE_DEMON:
                             attacks = new String[]{"Spit", "Bite", "Blind"};
-                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 5, name.toString(), attacks, level * 10);
+                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
                             enemies.add(fireDemon);
                             break;
                         case SMOKESTACK:
                             attacks = new String[]{"Smoke", "Crush", "Burn"};
-                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level * 5, name.toString(), attacks, level * 10);
+                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
                             enemies.add(smokestack);
                             break;
                     }
@@ -136,7 +136,7 @@ public class Room {
             if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString())){
                 playerDamage = e.draugrAttacks(p);
             } else  if (e.getName().equals(FireEnemies.FIRE_DEMON.toString())){
-                playerDamage = e.fireDemonAttacks();
+                playerDamage = e.fireDemonAttacks(p);
             } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString())){
                 playerDamage = e.smokestackAttacks();
             }
@@ -152,13 +152,15 @@ public class Room {
         if (choice.equals("1")){ // Cast
             int[] castDamage = p.cast();
             for (int x : castDamage){
-                Enemy enemytoDamage = GameIO.damageChoice(x, enemies);
-                assert enemytoDamage != null;
-                enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
-                if (enemytoDamage.getHealth() <= 0){
-                    p.setXp(p.getXp() + enemytoDamage.getXp());
-                    GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
-                    enemies.remove(enemytoDamage);
+                if (!enemies.isEmpty()) {
+                    Enemy enemytoDamage = GameIO.damageChoice(x, enemies);
+                    assert enemytoDamage != null;
+                    enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
+                    if (enemytoDamage.getHealth() <= 0) {
+                        p.setXp(p.getXp() + enemytoDamage.getXp());
+                        GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
+                        enemies.remove(enemytoDamage);
+                    }
                 }
             }
         } else if (choice.equals("2")){ // Chop
@@ -172,14 +174,14 @@ public class Room {
                 enemies.remove(enemytoDamage);
             }
         } else { // Swing
-            damage = p.swing();
-            Enemy enemytoDamage = GameIO.damageChoice(damage, enemies);
-            assert enemytoDamage != null;
-            enemytoDamage.setHealth(enemytoDamage.getHealth() - damage);
-            if (enemytoDamage.getHealth() <= 0){
-                p.setXp(p.getXp() + enemytoDamage.getXp());
-                GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
-                enemies.remove(enemytoDamage);
+            damage = p.swing()/enemies.size();
+            for (Enemy enemytoDamage : enemies) {
+                enemytoDamage.setHealth(enemytoDamage.getHealth() - damage);
+                if (enemytoDamage.getHealth() <= 0) {
+                    p.setXp(p.getXp() + enemytoDamage.getXp());
+                    GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
+                    enemies.remove(enemytoDamage);
+                }
             }
         }
     }
@@ -187,6 +189,7 @@ public class Room {
     private void endEncounter(Player p){
         p.setHealth(p.getPossibleHealth());
         p.levelUp();
+        p.removeDebuffs();
     }
 
     private String translateDifficulty(int difficulty){

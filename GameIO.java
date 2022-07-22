@@ -15,7 +15,27 @@ public class GameIO {
             check = name.isBlank() || name.matches(".*[0-9]+.*");
         }
         System.out.println("WELCOME TO THE DUNGEON " + name.toUpperCase());
-        return name;
+        return name.toUpperCase();
+    }
+
+    public static String topBorder(int length){
+        return "╔═" + "═".repeat(length) + "═╗\n  ";
+    }
+
+    public static String bottomBorder(int length){
+        return "╚═" + "═".repeat(length) + "═╝\n";
+    }
+
+    public static String playerHealthBar(int health, int possibleHealth){
+        String healthBar = "|";
+        for (int x = 0; x < health/2; x++){
+            healthBar += "■";
+        }
+        for (int x = 0; x < (possibleHealth - health)/2; x++){
+            healthBar += "□";
+        }
+        healthBar += "|";
+        return healthBar;
     }
 
     /**

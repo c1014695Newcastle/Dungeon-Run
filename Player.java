@@ -164,7 +164,7 @@ public class Player {
     public int[] cast(){
         Random rn = new Random();
         int roll;;
-        int[] damage = {0,0,0};;
+        int[] damage = {0,0,0};
         for (int x = 0; x < 3; x ++){
             roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
             damage[x] = damageDecider(castDamage, roll);
@@ -200,7 +200,7 @@ public class Player {
 
 
     public void levelUp(){
-        int newLevel = xp /= 100;
+        int newLevel = (xp / 100) + 1;
         if (newLevel > level){
             GameIO.reportLevelUp(newLevel, newLevel - level);
             setHealth(getHealth() + ((newLevel - level) * 10));
@@ -208,15 +208,18 @@ public class Player {
             setCastDamage(getCastDamage() + ((newLevel - level) * 5));
             setChopDamage(getChopDamage() + ((newLevel - level) * 5));
             setSwingDamage(getSwingDamage() + ((newLevel - level) * 5));
-            setLevel(level);
+            setLevel(newLevel);
         }
     }
 
     @Override
     public String toString(){
-        return "╔═══《✧》═══╗ \n  " + name + "\n" +
-                "  " + health + "/" + possibleHealth + "\n" +
-        "╚═══《✧》═══╝";
+        String healthBar = GameIO.playerHealthBar(health, possibleHealth);
+        String topBar = GameIO.topBorder(healthBar.length());
+        String bottomBar = GameIO.bottomBorder(healthBar.length());
+        return  topBar + name + " Level " + level + "\n" +
+                "  " + healthBar + "\n" + "  XP: " + xp + "\n" +
+       bottomBar;
     }
 
 
