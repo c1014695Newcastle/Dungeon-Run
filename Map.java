@@ -1,7 +1,6 @@
 import Enums.Types;
 
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -135,12 +134,15 @@ public class Map {
             if (p.getHealth() <= 0){
                 break;
             } else {
+                System.out.println("ENCOUNTER CLEARED");
+                r.endEncounter(p);
                 x = checkRoom(r);
                 Types roomtype = r.getType();
                 Room[] validRooms = checkValidRooms(r);
                 r = GameIO.pickRoom(validRooms);
                 if (roomtype != r.getType()) {
-                    System.out.println("boss encounter place");
+                    BossRoom b = new BossRoom(1, 1, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
+                    b.startEncounter(p);
                 }
             }
         }

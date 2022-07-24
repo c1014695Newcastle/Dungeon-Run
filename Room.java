@@ -1,5 +1,4 @@
 import Enums.FireEnemies;
-import Enums.PoisonEnemies;
 import Enums.Types;
 
 import java.util.ArrayList;
@@ -122,10 +121,7 @@ public class Room {
                 GameIO.playerDies();
             }
         }
-        if (p.getHealth() > 0) {
-            System.out.println("ENCOUNTER CLEARED");
-            endEncounter(p);
-        }
+
     }
 
     /**
@@ -135,11 +131,11 @@ public class Room {
     private void enemyTurns(Player p){
         int playerDamage = 0;
         for (Enemy e : enemies){
-            if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString())){
+            if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString().replace("_"," "))){
                 playerDamage = e.draugrAttacks(p);
-            } else  if (e.getName().equals(FireEnemies.FIRE_DEMON.toString())){
+            } else  if (e.getName().equals(FireEnemies.FIRE_DEMON.toString().replace("_"," "))){
                 playerDamage = e.fireDemonAttacks(p);
-            } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString())){
+            } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString().replace("_"," "))){
                 playerDamage = e.smokestackAttacks();
             }
             GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
@@ -193,7 +189,7 @@ public class Room {
         p.checkDebuffs();
     }
 
-    private void endEncounter(Player p){
+    protected void endEncounter(Player p){
         p.setHealth(p.getPossibleHealth());
         p.levelUp();
         p.removeDebuffs();
@@ -218,5 +214,151 @@ public class Room {
         return "[ " + ID + " " + type + " " + translateDifficulty(difficulty) + " ]";
     }
 
+
+}
+
+class BossRoom extends Room {
+    private Boss boss;
+
+    public Boss getBoss() {
+        return boss;
+    }
+
+    public void setBoss(Boss boss) {
+        this.boss = boss;
+    }
+
+    public BossRoom(int ID, int difficulty, Types type, Boss boss) {
+        super(ID, difficulty, type, 0);
+        this.boss = boss;
+    }
+
+    public void bossEncounter(Player p) {
+        while (boss.getHealth() > 0 && p.getHealth() > 0) {
+            System.out.println(p);
+            GameIO.sleep();
+            System.out.println(boss);
+            if (getEnemies().isEmpty()) {
+                GameIO.sleep();
+                attackBoss(p);
+                GameIO.sleep();
+                if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75)) {
+                    switch (boss.getName()){
+                        case "Fafnir" -> GameIO.fafClaws();
+                        case "Fenrir" -> GameIO.fenClaws();
+                        case "Jormungandr" -> System.out.println("NA");
+                    }
+                    boss.setPhase(2);
+                    GameIO.reportSupportEnemies(boss.getName());
+                    phaseBreak(2, boss.getLevel());
+                } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25)) {
+                    switch (boss.getName()){
+                        case "Fafnir" -> GameIO.fafFlight();
+                        case "Fenrir" -> GameIO.fenSnarl();
+                        case "Jormungandr" -> System.out.println("NA");
+                    }
+                    boss.setPhase(3);
+                    GameIO.reportSupportEnemies(boss.getName());
+                    boss.setBaseDamage(boss.getBaseDamage() * 2);
+                    phaseBreak(3, boss.getLevel());
+                }
+                if (boss.getHealth() >= 0) {
+                    int damage = 0;
+                    switch (boss.getPhase()) {
+                        case 1 -> {
+                            switch (boss.getName()){
+                                case "Fafnir" -> damage = boss.fafPhaseOneAttack(p);
+                                case "Fenrir" -> damage = 0;
+                                case "Jormungandr" -> damage = 0;
+                            }
+                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
+                            p.setHealth(p.getHealth() - damage);
+                        }
+                        case 2 -> {
+                            switch (boss.getName()){
+                                case "Fafnir" -> damage = boss.fafPhaseTwoAttack(p);
+                                case "Fenrir" -> damage = 0;
+                                case "Jormungandr" -> damage = 0;
+                            }
+                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
+                            p.setHealth(p.getHealth() - damage);
+                        }
+                        case 3 -> {
+                            switch (boss.getName()){
+                                case "Fafnir" -> damage = boss.fafPhaseThreeAttack(p);
+                                case "Fenrir" -> damage = 0;
+                                case "Jormungandr" -> damage = 0;
+                            }
+                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
+                            p.setHealth(p.getHealth() - damage);
+                        }
+                    }
+                    if (p.getHealth() <= 0) {
+                        GameIO.playerDies();
+                    }
+                } else {
+                    System.out.println("YOU KILLED FAFNIR");
+                    endEncounter(p);
+                }
+            } else {
+                startEncounter(p);
+                p.powerUp();
+            }
+        }
+    }
+
+
+
+    private void attackBoss(Player p) {
+        Random rn = new Random();
+        p.debuffs();
+        String choice;
+        int damage;
+        choice = GameIO.playerChoice();
+        if (choice.equals("1")) { // Cast
+            int[] castDamage = p.cast();
+            for (int x : castDamage) {
+                if (boss.getPhase() == 3 && rn.nextInt(5) <=3) {
+                    GameIO.recordMiss(boss.getName());
+                } else {
+                    boss.setHealth(boss.getHealth() - x);
+                    GameIO.chopReport(boss.getName(), x);
+                }
+            }
+        } else if (choice.equals("2")) { // Chop
+            damage = p.chop();
+            if (boss.getPhase() == 3 && rn.nextInt(5) <=3) {
+                GameIO.recordMiss(boss.getName());
+            } else {
+                boss.setHealth(boss.getHealth() - damage);
+                GameIO.chopReport(boss.getName(), damage);
+            }
+        } else { // Swing
+            damage = p.swing();
+            if (boss.getPhase() == 3 && rn.nextInt(5) <= 3) {
+                GameIO.recordMiss(boss.getName());
+            } else {
+                boss.setHealth(boss.getHealth() - damage);
+                GameIO.chopReport(boss.getName(), damage);
+            }
+        }
+        p.checkDebuffs();
+    }
+
+    private void phaseBreak(int numOfEnemies, int level){
+        String[] attacks;
+        for (int x = 0; x < numOfEnemies; x++) {
+            attacks = new String[]{"Chop", "Swing", "Bash"};
+            Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, FireEnemies.FIRE_DRAUGR.toString().replace("_", " "), attacks, level * 10);
+                getEnemies().add(fireDraugr);
+        }
+    }
+
+    public static void main(String[] args) {
+        Boss d = new Boss(1, "Fafnir");
+        Player p = new Player("LUKE");
+        BossRoom b = new BossRoom(1, 2, Types.FIRE, d);
+        b.bossEncounter(p);
+    }
 
 }

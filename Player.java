@@ -217,6 +217,15 @@ public class Player {
         }
     }
 
+    protected void powerUp(){
+        GameIO.reportStageClear();
+        if (getHealth() + 50 > getPossibleHealth()){
+            setHealth(getHealth());
+        } else {
+            setHealth(getHealth() + 50);
+        }
+    }
+
 
     public void levelUp(){
         int newLevel = (xp / 100) + 1;
