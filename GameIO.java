@@ -31,15 +31,15 @@ public class GameIO {
     }
 
     public static String playerHealthBar(int health, int possibleHealth){
-        String healthBar = "|";
+        StringBuilder healthBar = new StringBuilder("|");
         for (int x = 0; x < health/2; x++){
-            healthBar += "■";
+            healthBar.append("■");
         }
         for (int x = 0; x < (possibleHealth - health)/2; x++){
-            healthBar += "□";
+            healthBar.append("□");
         }
-        healthBar += "|";
-        return healthBar;
+        healthBar.append("|");
+        return healthBar.toString();
     }
 
     /**
@@ -84,6 +84,11 @@ public class GameIO {
         }
         return null;
     }
+
+    public static void castReport(String name, int damage){
+        System.out.println("\nYou do " + damage + " to " + name + "\n");
+    }
+
 
     /**
      * Standard method to allow the user to pick from a list of set choices
@@ -132,19 +137,34 @@ public class GameIO {
         System.out.println("\n You swing against " + enemy + " and cause " + damage + " damage!\n");
     }
 
+    public static void chopReport(String enemy, int damage){
+        System.out.println("\n You raise your sword and strike " + enemy + " and cause " + damage + " damage!\n");
+    }
+
 
     public static void enemyDies(String enemyName, int xp){
         System.out.println("\nYOU KILL THE " + enemyName + "!\n GAIN " + xp + " XP!\n");
     }
 
+    /**
+     * Method to report the start of the Jormungandr encounter
+     * @param name the boss name.
+     */
     public static void reportEncounterStart(String name){
         System.out.println("\nYou enter a large cavernous room, seemingly empty....\n");
-        sleep();
+        sleep(1000);
         System.out.println("\nYou hear a slinking on the far side of the cavern\n");
-        sleep();
+        sleep(1000);
         System.out.format("\n%s approaches\n", name);
     }
 
+    /**
+     * Method to report any damage done against the player and if it triggered any debuffs
+     * @param damage the damage against the player
+     * @param poisoned if the player has been poisoned by the attack
+     * @param burning if the player has been set on fire by the attack
+     * @param necrosis if the player has turned necrotic as a result of the last attack
+     */
     public static void damageReport(int damage, boolean poisoned, boolean burning, boolean necrosis){
         if (!poisoned) {
             System.out.println("YOU TAKE " + damage + "!\n\n");
@@ -157,25 +177,52 @@ public class GameIO {
         }
     }
 
-    public static void sleep(){
+    /**\
+     * Method to record the missed attack of a player against a boss
+     * @param name the boss' name
+     */
+    public static void recordMiss(String name){
+        if (name.equals("Fafnir")){
+            System.out.println("Fafnir takes flight and dodges your attack, you miss");
+        } else if (name.equals("Fenrir")){
+            System.out.println("Fenrir jumps out of the way of your attack, you miss");
+        } else {
+            System.out.println("Jormungandr slithers his way out of the path of your attack, you miss");
+        }
+    }
+
+
+    public static void sleep(int time){
         try
         {
-            Thread.sleep(1000);
+            Thread.sleep(time);
         }
         catch(InterruptedException ex)
         {
             Thread.currentThread().interrupt();
         }
     }
-    
+
+    /**
+     * Method to report the player levelling up after an encounter, tells them how much their stats have increased by
+     * @param newLevel the player's new level
+     * @param diff how many levels above their old level the player is now
+     */
     public static void reportLevelUp(int newLevel, int diff){
         System.out.println("\nYOU GAINED " + diff + " LEVELS\n");
-        sleep();
+        sleep(1000);
         System.out.println("\nYOU ARE NOW LEVEL " + newLevel);
         System.out.println("\tHEALTH +" + (newLevel * 10));
         System.out.println("\tCAST DAMAGE +" + (newLevel * 5) + "\n\tCHOP DAMAGE +" + (newLevel * 5) + "\n\tSWING DAMAGE +" + (newLevel * 5) + "\n");
     }
 
+    /**
+     * Method to allow the player to roll a dice to determine their attack damage, player rolls two dice and will always take the first unless disadvantage debuffs are in play, which means the player must take the lower of the two rolls
+     * @param poisoned the player's poison debuff - true means player takes lesser roll
+     * @param burning the player's burning debuff - true means player takes lesser roll
+     * @param necrosis the player's necrosis debuff - true means player takes lesser roll
+     * @return
+     */
     public static int playerRoll(boolean poisoned, boolean burning, boolean necrosis){
         System.out.print("Press enter to roll the dice");
         Scanner s = new Scanner(System.in);
@@ -183,7 +230,7 @@ public class GameIO {
         Random rn = new Random();
         int rollOne = rn.nextInt(10) + 1;
         int rollTwo = rn.nextInt(10) + 1;
-        sleep();
+        sleep(1000);
         System.out.format("""
                 
                 You Rolled:
@@ -210,6 +257,11 @@ public class GameIO {
         System.out.println("\nYou feel your strength returning to you - DEBUFFS CLEARED\n");
     }
 
+    /**
+     * Method to allow the player to pick a valid room to enter from the list of possible valid rooms
+     * @param rooms the valid rooms a player has to pick from
+     * @return the player's room choice
+     */
     public static Room pickRoom(Room[] rooms){
         System.out.println("Pick a room to continue");
         int x = 0;
@@ -235,6 +287,60 @@ public class GameIO {
         Scanner s = new Scanner(System.in);
         String choice = GameIO.choiceIO((x+1));
         return rooms[Integer.parseInt(choice)-1];
+    }
+
+    public static void fafVulnerable(){
+        System.out.println("Fafnir returns to the fighting plane, he is vulnerable again!");
+    }
+
+    public static void fafPhaseBattle(){
+        System.out.println("Fafnir drags his claws through the stone and summons Draugr to fight you!");
+    }
+
+    public static void fafClaws(){
+        System.out.println("Fafnir digs his claws into the stone and raises them to you!");
+    }
+
+    public static void fafFlight(){
+        System.out.println("Fafnir spreads his wings and takes flight, he will be much harder to hit now!");
+    }
+
+    public static void fenVulnerable(){
+        System.out.println("Fafnir returns to the fighting plane, he is vulnerable again!");
+    }
+
+    public static void fenPhaseBattle(){
+        System.out.println("Fafnir drags his claws through the stone and summons Draugr to fight you!");
+    }
+
+    public static void fenClaws(){
+        System.out.println("Fafnir digs his claws into the stone and raises them to you!");
+    }
+
+    public static void fenSnarl(){
+        System.out.println("Fafnir spreads his wings and takes flight, he will be much harder to hit now!");
+    }
+
+    public static void jorVulnerable(){
+        System.out.println("Fafnir returns to the fighting plane, he is vulnerable again!");
+    }
+
+    public static void jorPhaseBattle(){
+        System.out.println("Fafnir drags his claws through the stone and summons Draugr to fight you!");
+    }
+
+    public static void bossLine(String s){
+        System.out.format("\n\033[3;1m%s\033[0m\n",s);
+    }
+
+    public static void reportSupportEnemies(String name){
+        System.out.println((name + " falls back and summons Draugr to fight you!").toUpperCase());
+
+    }
+
+    public static void reportStageClear(){
+        System.out.println("You feel your strength begin to return\n\t+50 Health");
+        System.out.println("FAFNIR IS VULNERABLE AGAIN");
     }
 
     public static void main(String[] args) {

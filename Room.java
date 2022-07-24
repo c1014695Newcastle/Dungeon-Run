@@ -112,11 +112,11 @@ public class Room {
                 p.removeDebuffs();
                 GameIO.reportClearing();
             }
-            GameIO.sleep();
+            GameIO.sleep(1000);
             playerTurn(p);
-            GameIO.sleep();
+            GameIO.sleep(1000);
             enemyTurns(p);
-            GameIO.sleep();
+            GameIO.sleep(1000);
             if (p.getHealth() <= 0){
                 GameIO.playerDies();
             }
@@ -183,7 +183,7 @@ public class Room {
                     GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
                     enemies.remove(enemytoDamage);
                 }
-                GameIO.sleep();
+                GameIO.sleep(1000);
             }
         }
         p.checkDebuffs();
@@ -233,16 +233,21 @@ class BossRoom extends Room {
         this.boss = boss;
     }
 
+    /**
+     * Code for the boss encounter, continues until either the player or the boss is dead (health at 0 or below).
+     * @param p the player to fight the encounter
+     */
     public void bossEncounter(Player p) {
+        Random rn = new Random();
         while (boss.getHealth() > 0 && p.getHealth() > 0) {
             System.out.println(p);
-            GameIO.sleep();
+            GameIO.sleep(1000);
             System.out.println(boss);
             if (getEnemies().isEmpty()) {
-                GameIO.sleep();
+                GameIO.sleep(1000);
                 attackBoss(p);
-                GameIO.sleep();
-                if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75)) {
+                GameIO.sleep(1000);
+                if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75) && boss.getPhase() != 2) {
                     switch (boss.getName()){
                         case "Fafnir" -> GameIO.fafClaws();
                         case "Fenrir" -> GameIO.fenClaws();
@@ -251,7 +256,7 @@ class BossRoom extends Room {
                     boss.setPhase(2);
                     GameIO.reportSupportEnemies(boss.getName());
                     phaseBreak(2, boss.getLevel());
-                } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25)) {
+                } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25) && boss.getPhase() != 3) {
                     switch (boss.getName()){
                         case "Fafnir" -> GameIO.fafFlight();
                         case "Fenrir" -> GameIO.fenSnarl();
@@ -262,7 +267,10 @@ class BossRoom extends Room {
                     boss.setBaseDamage(boss.getBaseDamage() * 2);
                     phaseBreak(3, boss.getLevel());
                 }
+                GameIO.sleep(2000);
                 if (boss.getHealth() >= 0) {
+                    GameIO.bossLine(boss.getLines()[rn.nextInt(boss.getLines().length)]);
+                    GameIO.sleep(2000);
                     int damage = 0;
                     switch (boss.getPhase()) {
                         case 1 -> {
@@ -301,17 +309,33 @@ class BossRoom extends Room {
                     endEncounter(p);
                 }
             } else {
+                switch (boss.getName()){
+                    case "Fafnir" -> GameIO.fafPhaseBattle();
+                    case "Fenrir" -> GameIO.fenPhaseBattle();
+                    case "Jormungandr" -> GameIO.jorPhaseBattle();
+                }
                 startEncounter(p);
                 p.powerUp();
+                switch (boss.getName()){
+                    case "Fafnir" -> GameIO.fafVulnerable();
+                    case "Fenrir" -> GameIO.fenVulnerable();
+                    case "Jormungandr" -> GameIO.jorVulnerable();
+                }
             }
         }
     }
 
 
-
+    /**
+     * Method to allow the player to attack the boss, pick between 3 different attacks that are all aimed at the boss
+     * @param p the player in the encounter
+     */
     private void attackBoss(Player p) {
         Random rn = new Random();
         p.debuffs();
+        if (p.getHealth() <= 0){
+            GameIO.playerDies();
+        }
         String choice;
         int damage;
         choice = GameIO.playerChoice();
@@ -345,6 +369,11 @@ class BossRoom extends Room {
         p.checkDebuffs();
     }
 
+    /**
+     * Method to generate the support enemies that spawn between boss phases, player must kill these before they are allowed to damage the boss again
+     * @param numOfEnemies the number of support enemies that should spawn
+     * @param level the level these enemies spawn at
+     */
     private void phaseBreak(int numOfEnemies, int level){
         String[] attacks;
         for (int x = 0; x < numOfEnemies; x++) {

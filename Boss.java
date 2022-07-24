@@ -16,6 +16,7 @@ public class Boss {
     private final int xp;
     private ArrayList<Enemy> enemies;
     private int phase;
+    private final String[] lines;
 
     public int getLevel() {
         return level;
@@ -69,6 +70,10 @@ public class Boss {
         this.phase = phase;
     }
 
+    public String[] getLines() {
+        return lines;
+    }
+
     public Boss(int level, String name) {
         this.level = level;
         this.possibleHealth = 200 + (level * 50);
@@ -78,6 +83,22 @@ public class Boss {
         this.xp = level * 50;
         this.enemies = null;
         this.phase = 1;
+        this.lines = setLines(name);
+    }
+
+    private String[] setLines(String name) {
+        switch (name){
+            case "Fafnir" -> {
+                return new String[]{"You shall not escape.", "You dare challenge me.", "You shall burn.", "None shall take my treasure", "He will have you."};
+            }
+            case "Fenrir" -> {
+                return null;
+            }
+            case "Jormungandr" -> {
+                return null;
+            }
+        }
+        return null;
     }
 
 
@@ -85,10 +106,10 @@ public class Boss {
         Random rn = new Random();
         int roll = rn.nextInt(2) + 1;
         if (roll == 1){
-            GameIO.reportAttack("Bite", name);
+            GameIO.reportAttack(name, "Bite");
             return standardDamage(rn);
         } else {
-            GameIO.reportAttack("Fire", name);
+            GameIO.reportAttack( name, "Fire");
             return fireDamage(p, rn);
         }
     }
@@ -97,13 +118,13 @@ public class Boss {
         Random rn = new Random();
         int roll = rn.nextInt(3) + 1;
         if (roll == 1){
-            GameIO.reportAttack("Bite", name);
+            GameIO.reportAttack(name, "Bite");
             return standardDamage(rn);
         } else if (roll == 2) {
-            GameIO.reportAttack("Fire", name);
+            GameIO.reportAttack( name, "Fire");
             return fireDamage(p, rn);
         } else {
-            GameIO.reportAttack("Dive", name);
+            GameIO.reportAttack( name, "Dive");
             return standardDamage(rn) + 10;
         }
     }
@@ -112,16 +133,16 @@ public class Boss {
         Random rn = new Random();
         int roll = rn.nextInt(4) + 1;
         if (roll == 1){
-            GameIO.reportAttack("Bite", name);
+            GameIO.reportAttack(name, "Bite");
             return standardDamage(rn);
         } else if (roll == 2) {
-            GameIO.reportAttack("Fire", name);
+            GameIO.reportAttack( name, "Fire");
             return fireDamage(p, rn);
         } else if (roll == 3){
-            GameIO.reportAttack("Dive", name);
+            GameIO.reportAttack( name, "Dive");
             return standardDamage(rn) + 10;
         } else {
-            GameIO.reportAttack("Talon Swipe", name);
+            GameIO.reportAttack(name, "Talon Swipe");
             return  fireDamage(p, rn) + 10;
         }
     }

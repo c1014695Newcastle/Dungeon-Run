@@ -83,18 +83,26 @@ public class Map {
     public static void main(String[] args) {
         String timeStamp = new SimpleDateFormat("yyyy/MM/dd - HH:mm.ss").format(Calendar.getInstance().getTime());
         System.out.println("MAP CHECK TESTS " + timeStamp);
-        System.out.println("\n\n");
-        Map m = new Map();
-        System.out.println(m);
-        Room[][] r = m.getRooms();
-        System.out.println(m.checkMap(0,0));
-        System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
+        for (int x = 0; x <100; x++) {
+            System.out.println("\n\n");
+            Map m = new Map();
+            System.out.println(m);
+            Room[][] r = m.getRooms();
+            System.out.println(m.checkMap(0, 0));
+            System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
+        }
     }
 
     private boolean isLegal(int x, int y){
         return (x <=4 && x >=0) && (y <=4 && y >=0);
     }
 
+    /**]
+     * Recursive algorithm to make sure that the map the player is about to play actually has a valid path to the end. Checks the x and y coordinates of the room to see if there are any valid rooms around the calling room.
+     * @param x the x coordinate of the room calling the method
+     * @param y the y coordinate of the room calling the method
+     * @return true if there is a valid path present from the start, otherwise false
+     */
     public boolean checkMap(int x, int y){
         boolean path = false;
         while (!path) {
@@ -115,6 +123,11 @@ public class Map {
         return true;
     }
 
+    /**
+     * Finds the x coordinate of the room to see if the player has reached the end boundary at x = 4
+     * @param r the room the player has selected
+     * @return the x coordinate of the room
+     */
     private int checkRoom(Room r){
         for (int x = 0; x < 4; x++){
             for (int y = 0; y < 4; y++){
@@ -148,6 +161,11 @@ public class Map {
         }
    }
 
+    /**
+     * Checks if a room is valid for the player to move into from their current position, must be 1 x or y coordinate move from their current room position relative to the map
+     * @param r the room the player is in
+     * @return the list of valid rooms
+     */
    private Room[] checkValidRooms(Room r) {
        Room[] validRooms = new Room[4];
        for (int x = 0; x < 4; x++) {
