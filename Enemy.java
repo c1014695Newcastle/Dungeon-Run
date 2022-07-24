@@ -1,5 +1,7 @@
 
 
+import Enums.FireEnemies;
+
 import java.util.Random;
 
 public class Enemy {
@@ -82,7 +84,37 @@ public class Enemy {
         this.name = name;
     }
 
+    protected int draugrPoisonDamageAttack(Player p, Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll <= 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 2;
+        } else if (roll < 8) {
+            return baseDamage + 5;
+        } else {
+            p.setBurning(true);
+            p.setDebuffCounter(3);
+            return baseDamage + 7;
+        }
+    }
 
+    protected int draugrStandardDamageAttack(Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 1;
+        } else if (roll < 8) {
+            return baseDamage + 3;
+        } else {
+            return baseDamage + 10;
+        }
+    }
 
     public int draugrAttacks(Player p) {
         Random rn = new Random();
@@ -90,66 +122,14 @@ public class Enemy {
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Chop")){
             GameIO.reportAttack("Draugr", "Chop");
-            return draugrChop(p, rn);
+            return draugrPoisonDamageAttack(p, rn);
         } else if (attack.equals("Swing")){
             GameIO.reportAttack("Draugr", "Swing");
-            return draugrSwing(p, rn);
+            return draugrPoisonDamageAttack(p, rn);
         } else {
             GameIO.reportAttack("Draugr", "Bash");
-            return draugrBash(rn);
+            return draugrStandardDamageAttack(rn);
         }
-    }
-
-    private int draugrChop(Player p, Random rn){
-        int roll = rn.nextInt(10) + 1;
-        if (roll == 1){
-            return 0;
-        } else if (roll >= 2 && roll < 4){
-            return baseDamage/2;
-        } else if (roll >= 4 && roll < 6) {
-            return baseDamage;
-        } else if (roll >= 6 && roll < 8) {
-            return this.baseDamage + (baseDamage * roll/10);
-        } else if (roll >= 8) {
-            p.setDebuffCounter(3);
-            p.setPoisoned(true);
-            return baseDamage * 2;
-        }
-        return 0;
-    }
-
-    private int draugrSwing(Player p, Random rn) {
-        int roll = rn.nextInt(10) + 1;
-        if (roll == 1){
-            return 0;
-        } else if (roll >= 2 && roll < 4){
-            return baseDamage;
-        } else if (roll >= 4 && roll < 6) {
-            return baseDamage + 2;
-        } else if (roll >= 6 && roll < 8) {
-            return baseDamage + 5;
-        } else if (roll >= 8) {
-            p.setPoisoned(true);
-            p.setDebuffCounter(3);
-            return baseDamage + 7;
-        }
-        return 0;
-    }
-
-    private int draugrBash(Random rn){
-        int roll = rn.nextInt(10) + 1;
-        if (roll == 1){
-            return 0;
-        } else if (roll >= 2 && roll < 4){
-            return baseDamage;
-        } else if (roll >= 4 && roll < 6) {
-            return baseDamage + 1;
-        } else if (roll >= 6 && roll < 8) {
-            return baseDamage + 3;
-        } else if (roll >= 8) {
-            return baseDamage + 10;
-        }
-        return 0;
     }
 
     public int fireDemonAttacks(Player p) {
@@ -169,50 +149,47 @@ public class Enemy {
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
             return 0;
-        } else if (roll >= 2 && roll < 4){
+        } else if (roll < 4){
             return baseDamage;
-        } else if (roll >= 4 && roll < 6) {
+        } else if (roll < 6) {
             return baseDamage + 2;
-        } else if (roll >= 6 && roll < 8) {
+        } else if (roll < 8) {
             return baseDamage + 5;
-        } else if (roll >= 8) {
+        } else {
             return baseDamage + 7;
         }
-        return 0;
     }
 
     private int demonBite(Random rn) {
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
             return 0;
-        } else if (roll >= 2 && roll < 4){
+        } else if (roll < 4){
             return baseDamage;
-        } else if (roll >= 4 && roll < 6) {
+        } else if (roll < 6) {
             return baseDamage + 2;
-        } else if (roll >= 6 && roll < 8) {
+        } else if (roll < 8) {
             return baseDamage + 5;
-        } else if (roll >= 8) {
+        } else {
             return baseDamage + 7;
         }
-        return 0;
     }
 
     private int demonBurn(Random rn, Player p) {
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
             return 0;
-        } else if (roll >= 2 && roll < 4){
+        } else if (roll < 4){
             return baseDamage;
-        } else if (roll >= 4 && roll < 6) {
+        } else if (roll < 6) {
             return baseDamage + 2;
-        } else if (roll >= 6 && roll < 8) {
+        } else if (roll < 8) {
             return baseDamage + 5;
-        } else if (roll >= 8) {
-            p.setPoisoned(true);
+        } else {
+            p.setBurning(true);
             p.setDebuffCounter(3);
             return baseDamage + 7;
         }
-        return 0;
     }
 
     public int smokestackAttacks() {
@@ -220,12 +197,39 @@ public class Enemy {
         String[] attacks = getAttacks();
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Spit")){
-            return 0;
+            return smokestackDamage(rn);
         } else if (attack.equals("Bite")){
-            return 0;
+            return smokestackDamage(rn);
         } else {
-            return 0;
+            return smokestackDamage(rn);
         }
+    }
+
+    protected int smokestackDamage(Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 2;
+        } else if (roll < 8) {
+            return baseDamage + 3;
+        } else {
+            return baseDamage + 4;
+        }
+    }
+
+    public int enemyAttack(Player p){
+        int playerDamage = 0;
+        if (name.equals(FireEnemies.FIRE_DRAUGR.toString())){
+            playerDamage = draugrAttacks(p);
+        } else  if (name.equals(FireEnemies.FIRE_DEMON.toString())){
+            playerDamage = fireDemonAttacks(p);
+        } else if (name.equals(FireEnemies.SMOKESTACK.toString())){
+            playerDamage = smokestackAttacks();
+        }
+        return playerDamage;
     }
 
     @Override
@@ -234,7 +238,7 @@ public class Enemy {
         String topBar = GameIO.topBorder(healthBar.length()*2);
         String bottomBar = GameIO.bottomBorder(healthBar.length()*2);
         return topBar +
-                 "\tLevel " + level + " " + name + "\n"  + "\tHealth: " + healthBar + "\n"  +bottomBar;
+                 "\tLevel " + level + " " + name.replace("_"," ") + "\n"  + "\tHealth: " + healthBar + "\n    "+ health + "\\" + possibleHealth + "\n"  +bottomBar;
     }
 }
 

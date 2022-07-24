@@ -17,7 +17,7 @@ public class Room {
         this.ID = ID;
         this.difficulty = difficulty;
         this.type = type;
-        this.enemies = generateEnemies(3, type, difficulty);
+        this.enemies = generateEnemies(numOfEnemies, type, difficulty);
     }
 
     public int getID() {
@@ -66,32 +66,34 @@ public class Room {
         for (int x = 0; x < numOfEnemies; x++) {
             int level = rn.nextInt(5) + 1;
             String[] attacks;
-            switch(type){
-                case FIRE:
-                    FireEnemies name = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
-                    switch (name) {
-                        case FIRE_DRAUGR:
-                            attacks = new String[]{"Chop", "Swing", "Bash"};
-                            Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
-                            enemies.add(fireDraugr);
-                            break;
-                        case FIRE_DEMON:
-                            attacks = new String[]{"Spit", "Bite", "Blind"};
-                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
-                            enemies.add(fireDemon);
-                            break;
-                        case SMOKESTACK:
-                            attacks = new String[]{"Smoke", "Crush", "Burn"};
-                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level * 2, name.toString(), attacks, level * 10);
-                            enemies.add(smokestack);
-                            break;
-                    }
-                    break;
-                case POISON:
+            if (difficulty == 1) {
+                switch (type) {
+                    case FIRE:
+                        FireEnemies name = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
+                        switch (name) {
+                            case FIRE_DRAUGR:
+                                attacks = new String[]{"Chop", "Swing", "Bash"};
+                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                enemies.add(fireDraugr);
+                                break;
+                            case FIRE_DEMON:
+                                attacks = new String[]{"Spit", "Bite", "Blind"};
+                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                enemies.add(fireDemon);
+                                break;
+                            case SMOKESTACK:
+                                attacks = new String[]{"Smoke", "Crush", "Burn"};
+                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                enemies.add(smokestack);
+                                break;
+                        }
+                        break;
+                    case POISON:
 
-                    break;
-                case NECROTIC:
-                    break;
+                        break;
+                    case NECROTIC:
+                        break;
+                }
             }
         }
         return enemies;
@@ -140,12 +142,13 @@ public class Room {
             } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString())){
                 playerDamage = e.smokestackAttacks();
             }
-            GameIO.damageReport(playerDamage, p.isPoisoned());
+            GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
             p.setHealth(p.getHealth() - playerDamage);
         }
     }
 
-    private void playerTurn(Player p){
+    public void playerTurn(Player p){
+        p.debuffs();
         String choice;
         int damage;
         choice = GameIO.playerChoice();
@@ -175,15 +178,19 @@ public class Room {
             }
         } else { // Swing
             damage = p.swing()/enemies.size();
-            for (Enemy enemytoDamage : enemies) {
+            for (int x = 0; x < enemies.size(); x++) {
+                Enemy enemytoDamage = enemies.get(x);
+                GameIO.swingReport(enemytoDamage.getName(), damage);
                 enemytoDamage.setHealth(enemytoDamage.getHealth() - damage);
                 if (enemytoDamage.getHealth() <= 0) {
                     p.setXp(p.getXp() + enemytoDamage.getXp());
                     GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
                     enemies.remove(enemytoDamage);
                 }
+                GameIO.sleep();
             }
         }
+        p.checkDebuffs();
     }
 
     private void endEncounter(Player p){

@@ -197,6 +197,25 @@ public class Player {
         return 0;
     }
 
+    public void checkDebuffs(){
+        if (poisoned){
+            setDebuffCounter(debuffCounter - 1);
+        } else if (burning) {
+            setDebuffCounter(debuffCounter - 1);
+        } else if (necrosis) {
+            setDebuffCounter(debuffCounter - 1);
+        }
+        if (debuffCounter == 0){
+            removeDebuffs();
+        }
+    }
+
+    public void debuffs(){
+        if (burning){
+            GameIO.burningDamage();
+            setHealth(getHealth() - 5);
+        }
+    }
 
 
     public void levelUp(){
@@ -218,7 +237,7 @@ public class Player {
         String topBar = GameIO.topBorder(healthBar.length());
         String bottomBar = GameIO.bottomBorder(healthBar.length());
         return  topBar + name + " Level " + level + "\n" +
-                "  " + healthBar + "\n" + "  XP: " + xp + "\n" +
+                "  " + healthBar + "\n  " + health + "\\" + possibleHealth + "\n" + "  XP: " + xp + "\n" +
        bottomBar;
     }
 

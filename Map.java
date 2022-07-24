@@ -28,18 +28,24 @@ public class Map {
             for (int y = 0; y < 5; y++) {
                 int randNum = ran.nextInt(4) + 1;
                 if (y == 0 || y == 1) {
-                    if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.FIRE, 0);
-                        rooms[x][y] = r;
-                        ID++;
-                    } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.FIRE, 0);
-                        rooms[x][y] = r;
-                        ID++;
-                    } else {
+                    if (x == 0 || y == 0){
                         Room r = new Room(ID, 1, Types.FIRE, 3);
                         rooms[x][y] = r;
                         ID++;
+                    } else {
+                        if (randNum == 3 || randNum == 4) {
+                            Room r = new Room(ID, 0, Types.FIRE, 0);
+                            rooms[x][y] = r;
+                            ID++;
+                        } else if (randNum == 1) {
+                            Room r = new Room(ID, 4, Types.FIRE, 0);
+                            rooms[x][y] = r;
+                            ID++;
+                        } else {
+                            Room r = new Room(ID, 1, Types.FIRE, 3);
+                            rooms[x][y] = r;
+                            ID++;
+                        }
                     }
                 } else if (y == 2) {
                     if (randNum == 3 || randNum == 4) {
@@ -148,20 +154,22 @@ public class Map {
                    if (isLegal(x + 1, y)) {
                        //Right
                        validRooms[0] = rooms[x + 1][y];
-                   } else if (isLegal(x - 1, y)) {
+                   }
+                   if (isLegal(x - 1, y)) {
                        //Left
                        validRooms[1] = rooms[x - 1][y];
-                   } else if (isLegal(x, y + 1)) {
+                   }
+                   if (isLegal(x, y + 1)) {
                        //Up
                        validRooms[2] = rooms[x][y + 1];
-                   } else if (isLegal(x, y - 1)) {
+                   }
+                   if (isLegal(x, y - 1)) {
                        //Down
                        validRooms[3] = rooms[x][y - 1];
                    }
                }
            }
        }
-       System.out.println(validRooms);
        return validRooms;
    }
 

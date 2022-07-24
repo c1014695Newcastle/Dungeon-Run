@@ -18,6 +18,10 @@ public class GameIO {
         return name.toUpperCase();
     }
 
+    public static void burningDamage(){
+        System.out.println("YOU ARE BURNING - YOU TAKE 5 DAMAGE");
+    }
+
     public static String topBorder(int length){
         return "╔═" + "═".repeat(length) + "═╗\n  ";
     }
@@ -69,7 +73,7 @@ public class GameIO {
     public static Enemy damageChoice(int damage, ArrayList<Enemy> enemies){
         System.out.println("Select an enemy to do " + damage + " damage to:");
         for (int x = 0; x < enemies.size(); x ++) {
-            System.out.println("\t" + (x + 1) + " " + enemies.get(x).getName() + " - " + enemies.get(x).getHealth());
+            System.out.println("\t" + (x + 1) + " " + enemies.get(x).getName().replace("_"," ") + " - " + enemies.get(x).getHealth());
         }
         String choice = choiceIO(enemies.size());
         for (int x = 0; x < enemies.size(); x++){
@@ -124,14 +128,31 @@ public class GameIO {
         System.out.println("\n" + enemy + " uses " + attack + "!\n");
     }
 
+    public static void swingReport(String enemy, int damage){
+        System.out.println("\n You swing against " + enemy + " and cause " + damage + " damage!\n");
+    }
+
+
     public static void enemyDies(String enemyName, int xp){
         System.out.println("\nYOU KILL THE " + enemyName + "!\n GAIN " + xp + " XP!\n");
     }
 
-    public static void damageReport(int damage, boolean poisoned){
+    public static void reportEncounterStart(String name){
+        System.out.println("\nYou enter a large cavernous room, seemingly empty....\n");
+        sleep();
+        System.out.println("\nYou hear a slinking on the far side of the cavern\n");
+        sleep();
+        System.out.format("\n%s approaches\n", name);
+    }
+
+    public static void damageReport(int damage, boolean poisoned, boolean burning, boolean necrosis){
         if (!poisoned) {
             System.out.println("YOU TAKE " + damage + "!\n\n");
-        } else {
+        } else if (burning){
+            System.out.println("YOU TAKE " + damage + " AND ARE ON FIRE!");
+        } else if (necrosis) {
+            System.out.println("YOU TAKE " + damage + " AND ARE NECROTIC!");
+        }else {
             System.out.println("YOU TAKE " + damage + " AND ARE POISONED!");
         }
     }
@@ -193,21 +214,21 @@ public class GameIO {
         System.out.println("Pick a room to continue");
         int x = 0;
         if (rooms[0] != null){
-            System.out.println("\t " + (x+1) + " - Right" + rooms[0]);
+            System.out.println("\t" + (x+1) + " - Right " + rooms[0]);
             x++;
         }
         if (rooms[1] != null){
-            System.out.println("\t" + (x+1) + " - Left" + rooms[1]);
+            System.out.println("\t" + (x+1) + " - Left " + rooms[1]);
             rooms[x] = rooms[1];
             x++;
         }
         if (rooms[2] != null){
-            System.out.println("\t" + (x+1) + " - Up" + rooms[2]);
+            System.out.println("\t" + (x+1) + " - Up " + rooms[2]);
             rooms[x] = rooms[2];
             x++;
         }
         if (rooms[3] != null){
-            System.out.println("\t" + (x+1) + " - Down" + rooms[3]);
+            System.out.println("\t" + (x+1) + " - Down " + rooms[3]);
             rooms[x] = rooms[3];
             x++;
         }
