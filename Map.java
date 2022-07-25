@@ -86,7 +86,7 @@ public class Map {
         for (int x = 0; x <100; x++) {
             System.out.println("\n\n");
             Map m = new Map();
-            System.out.println(m);
+            System.out.println(m.toString(m.rooms[1][1].getID()));
             Room[][] r = m.getRooms();
             System.out.println(m.checkMap(0, 0));
             System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
@@ -147,15 +147,27 @@ public class Map {
             if (p.getHealth() <= 0){
                 break;
             } else {
+                System.out.println(x);
                 System.out.println("ENCOUNTER CLEARED");
                 r.endEncounter(p);
                 x = checkRoom(r);
                 Types roomtype = r.getType();
+                System.out.println(this.toString(r.getID()));
                 Room[] validRooms = checkValidRooms(r);
                 r = GameIO.pickRoom(validRooms);
                 if (roomtype != r.getType()) {
-                    BossRoom b = new BossRoom(1, 1, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
-                    b.startEncounter(p);
+                    switch (roomtype){
+                        case FIRE -> {
+                            BossRoom b = new BossRoom(1, 1, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
+                            b.bossEncounter(p);
+                        }
+                        case NECROTIC -> {
+                            System.out.println("TBR");
+                        }
+                        case POISON -> {
+                            System.out.println("TBR");
+                        }
+                    }
                 }
             }
         }
@@ -194,23 +206,42 @@ public class Map {
    }
 
 
-    public String toString() {
-        String s = "+--------------------------------------------------------------------------------------+\n";
+    public String toString(int id) {
+       int player = 0;
+        StringBuilder s = new StringBuilder("+---------------------+\n");
             for (int k = 0; k < 5; k++) {
                 for (int j = 0; j < 5; j++) {
                     if (j == 0) {
-                        s += "| " + rooms[k][j] + " ";
+                        if (id == player) {
+                            s.append("| " + "[x]" + " ");
+                            player++;
+                        } else {
+                            s.append("| " + "[ ]" + " ");
+                            player++;
+                        }
                     }
                     if (j == 4) {
-                        s += rooms[k][j] + " |\n";
+                        if (id == player) {
+                            s.append("[x]" + " |\n");
+                            player++;
+                        } else {
+                            s.append("[ ]" + " |\n");
+                            player++;
+                        }
                     }
                     if (j != 0 && j != 4) {
-                        s += rooms[k][j] + " ";
+                        if (id == player) {
+                            s.append("[x]" + " ");
+                            player++;
+                        } else {
+                            s.append("[ ]" + " ");
+                            player++;
+                        }
                     }
                 }
             }
-        s += "+--------------------------------------------------------------------------------------+";
-        return s;
+        s.append("+---------------------+");
+        return s.toString();
     }
 }
 

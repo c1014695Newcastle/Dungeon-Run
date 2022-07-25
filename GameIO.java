@@ -119,7 +119,7 @@ public class GameIO {
      * @return true or false depending on whether the player input is acceptable or not, if true then the player will be asked to re-enter their choice.
      */
     private static boolean checkChoice(String choice, int numOfChoices){
-        if (choice.matches(".*[a-zA-Z!@#$%^&*)(+=._'-]+.*") | choice.isEmpty()) {
+        if (choice.matches(".*[a-zA-Z!@#$%^&*)(+=._'`-]+.*") | choice.isEmpty()) {
             return true;
         } else return Integer.parseInt(choice) > numOfChoices;
     }
@@ -266,21 +266,21 @@ public class GameIO {
         System.out.println("Pick a room to continue");
         int x = 0;
         if (rooms[0] != null){
-            System.out.println("\t" + (x+1) + " - Right " + rooms[0]);
+            System.out.println("\t" + (x+1) + " - Down " + rooms[0]);
             x++;
         }
         if (rooms[1] != null){
-            System.out.println("\t" + (x+1) + " - Left " + rooms[1]);
+            System.out.println("\t" + (x+1) + " - Up " + rooms[1]);
             rooms[x] = rooms[1];
             x++;
         }
         if (rooms[2] != null){
-            System.out.println("\t" + (x+1) + " - Up " + rooms[2]);
+            System.out.println("\t" + (x+1) + " - Right " + rooms[2]);
             rooms[x] = rooms[2];
             x++;
         }
         if (rooms[3] != null){
-            System.out.println("\t" + (x+1) + " - Down " + rooms[3]);
+            System.out.println("\t" + (x+1) + " - Left " + rooms[3]);
             rooms[x] = rooms[3];
             x++;
         }

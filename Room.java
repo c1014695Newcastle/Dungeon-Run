@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Room {
     private int ID;
-    private ArrayList<Enemy> enemies;
+    private ArrayList<Enemy> waveOne;
     private int difficulty;
     private Types type;
 
@@ -16,7 +16,9 @@ public class Room {
         this.ID = ID;
         this.difficulty = difficulty;
         this.type = type;
-        this.enemies = generateEnemies(numOfEnemies, type, difficulty);
+        this.waveOne = generateEnemies(numOfEnemies, type, difficulty);
+
+
     }
 
     public int getID() {
@@ -27,12 +29,12 @@ public class Room {
         this.ID = ID;
     }
 
-    public ArrayList<Enemy> getEnemies() {
-        return enemies;
+    public ArrayList<Enemy> getWaveOne() {
+        return waveOne;
     }
 
-    public void setEnemies(ArrayList<Enemy> enemies) {
-        this.enemies = enemies;
+    public void setWaveOne(ArrayList<Enemy> waveOne) {
+        this.waveOne = waveOne;
     }
 
     public int getDifficulty() {
@@ -103,9 +105,9 @@ public class Room {
      * @param p the player character
      */
     public void startEncounter(Player p){
-        while (!enemies.isEmpty() && p.getHealth() > 0){
+        while (!waveOne.isEmpty() && p.getHealth() > 0){
             System.out.println(p);
-            for (Enemy e : enemies){
+            for (Enemy e : waveOne){
                 System.out.println(e);
             }
             if ((p.isPoisoned() || p.isBurning() || p.isNecrosis()) && p.getDebuffCounter() == 0){
@@ -121,7 +123,6 @@ public class Room {
                 GameIO.playerDies();
             }
         }
-
     }
 
     /**
@@ -130,7 +131,7 @@ public class Room {
      */
     private void enemyTurns(Player p){
         int playerDamage = 0;
-        for (Enemy e : enemies){
+        for (Enemy e : waveOne){
             if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString().replace("_"," "))){
                 playerDamage = e.draugrAttacks(p);
             } else  if (e.getName().equals(FireEnemies.FIRE_DEMON.toString().replace("_"," "))){
@@ -151,37 +152,37 @@ public class Room {
         if (choice.equals("1")){ // Cast
             int[] castDamage = p.cast();
             for (int x : castDamage){
-                if (!enemies.isEmpty()) {
-                    Enemy enemytoDamage = GameIO.damageChoice(x, enemies);
+                if (!waveOne.isEmpty()) {
+                    Enemy enemytoDamage = GameIO.damageChoice(x, waveOne);
                     assert enemytoDamage != null;
                     enemytoDamage.setHealth(enemytoDamage.getHealth() - x);
                     if (enemytoDamage.getHealth() <= 0) {
                         p.setXp(p.getXp() + enemytoDamage.getXp());
                         GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
-                        enemies.remove(enemytoDamage);
+                        waveOne.remove(enemytoDamage);
                     }
                 }
             }
         } else if (choice.equals("2")){ // Chop
             damage = p.chop();
-            Enemy enemytoDamage = GameIO.damageChoice(damage, enemies);
+            Enemy enemytoDamage = GameIO.damageChoice(damage, waveOne);
             assert enemytoDamage != null;
             enemytoDamage.setHealth(enemytoDamage.getHealth() - damage);
             if (enemytoDamage.getHealth() <= 0){
                 p.setXp(p.getXp() + enemytoDamage.getXp());
                 GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
-                enemies.remove(enemytoDamage);
+                waveOne.remove(enemytoDamage);
             }
         } else { // Swing
-            damage = p.swing()/enemies.size();
-            for (int x = 0; x < enemies.size(); x++) {
-                Enemy enemytoDamage = enemies.get(x);
+            damage = p.swing()/ waveOne.size();
+            for (int x = 0; x < waveOne.size(); x++) {
+                Enemy enemytoDamage = waveOne.get(x);
                 GameIO.swingReport(enemytoDamage.getName(), damage);
                 enemytoDamage.setHealth(enemytoDamage.getHealth() - damage);
                 if (enemytoDamage.getHealth() <= 0) {
                     p.setXp(p.getXp() + enemytoDamage.getXp());
                     GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
-                    enemies.remove(enemytoDamage);
+                    waveOne.remove(enemytoDamage);
                 }
                 GameIO.sleep(1000);
             }
@@ -214,7 +215,6 @@ public class Room {
         return "[ " + ID + " " + type + " " + translateDifficulty(difficulty) + " ]";
     }
 
-
 }
 
 class BossRoom extends Room {
@@ -243,7 +243,7 @@ class BossRoom extends Room {
             System.out.println(p);
             GameIO.sleep(1000);
             System.out.println(boss);
-            if (getEnemies().isEmpty()) {
+            if (getWaveOne().isEmpty()) {
                 GameIO.sleep(1000);
                 attackBoss(p);
                 GameIO.sleep(1000);
@@ -379,7 +379,7 @@ class BossRoom extends Room {
         for (int x = 0; x < numOfEnemies; x++) {
             attacks = new String[]{"Chop", "Swing", "Bash"};
             Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, FireEnemies.FIRE_DRAUGR.toString().replace("_", " "), attacks, level * 10);
-                getEnemies().add(fireDraugr);
+                getWaveOne().add(fireDraugr);
         }
     }
 

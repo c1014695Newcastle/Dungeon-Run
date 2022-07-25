@@ -9,7 +9,7 @@ public class Main {
                 m.setRooms();
             }
         }
-        System.out.println(m);
+        System.out.println(m.toString(0));
         m.mapProgression(p);
     }
 }
