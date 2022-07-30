@@ -88,7 +88,6 @@ public class Map {
             System.out.println("\n\n");
             Map m = new Map();
             System.out.println(m.toString(m.rooms[1][1].getID()));
-            Room[][] r = m.getRooms();
             System.out.println(m.checkMap(0, 0));
             System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
         }
@@ -159,14 +158,16 @@ public class Map {
                 if (roomtype != r.getType()) {
                     switch (roomtype){
                         case FIRE -> {
-                            BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
+                            BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, new Boss(p.getLevel(), Boss.bossName.FAFNIR));
                             b.bossEncounter(p);
                         }
                         case NECROTIC -> {
-                            System.out.println("TBR");
+                            BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, new Boss(p.getLevel(), Boss.bossName.FENRIR));
+                            b.bossEncounter(p);
                         }
                         case POISON -> {
-                            System.out.println("TBR");
+                            BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, new Boss(p.getLevel(), Boss.bossName.JORMUNGANDR));
+                            b.bossEncounter(p);
                         }
                     }
                 }
