@@ -1,3 +1,5 @@
+import Enums.Types;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -179,6 +181,8 @@ public class Boss {
     public static void main(String[] args) {
         Boss d = new Boss(1, "Fafnir");
         Player p = new Player("Luke");
+        BossRoom b = new BossRoom(1, 1, Types.FIRE, d);
+        b.bossEncounter(p);
     }
 
     @Override

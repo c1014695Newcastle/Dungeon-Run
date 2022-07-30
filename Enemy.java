@@ -84,7 +84,7 @@ public class Enemy {
         this.name = name;
     }
 
-    protected int draugrPoisonDamageAttack(Player p, Random rn){
+    protected int draugrFireDamageAttack(Player p, Random rn){
         int roll = rn.nextInt(10) + 1;
         if (roll <= 1){
             return 0;
@@ -96,6 +96,23 @@ public class Enemy {
             return baseDamage + 5;
         } else {
             p.setBurning(true);
+            p.setDebuffCounter(3);
+            return baseDamage + 7;
+        }
+    }
+
+    protected int draugrPoisonDamageAttack(Player p, Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll <= 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 2;
+        } else if (roll < 8) {
+            return baseDamage + 5;
+        } else {
+            p.setPoisoned(true);
             p.setDebuffCounter(3);
             return baseDamage + 7;
         }
@@ -122,10 +139,10 @@ public class Enemy {
         String attack = attacks[rn.nextInt(attacks.length)];
         if (attack.equals("Chop")){
             GameIO.reportAttack("Draugr", "Chop");
-            return draugrPoisonDamageAttack(p, rn);
+            return draugrFireDamageAttack(p, rn);
         } else if (attack.equals("Swing")){
             GameIO.reportAttack("Draugr", "Swing");
-            return draugrPoisonDamageAttack(p, rn);
+            return draugrFireDamageAttack(p, rn);
         } else {
             GameIO.reportAttack("Draugr", "Bash");
             return draugrStandardDamageAttack(rn);

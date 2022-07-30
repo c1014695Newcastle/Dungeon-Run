@@ -1,4 +1,5 @@
 import Enums.FireEnemies;
+import Enums.PoisonEnemies;
 import Enums.Types;
 
 import java.util.ArrayList;
@@ -64,33 +65,53 @@ public class Room {
     private ArrayList<Enemy> generateEnemies(int numOfEnemies, Types type, int difficulty) {
         Random rn = new Random();
         ArrayList<Enemy> enemies = new ArrayList<>();
+        PoisonEnemies pName;
+        FireEnemies fName;
+        //PoisonEnemies nName;
         for (int x = 0; x < numOfEnemies; x++) {
             int level = rn.nextInt(5) + 1;
             String[] attacks;
             if (difficulty == 1) {
                 switch (type) {
                     case FIRE:
-                        FireEnemies name = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
-                        switch (name) {
+                        fName = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
+                        switch (fName) {
                             case FIRE_DRAUGR:
                                 attacks = new String[]{"Chop", "Swing", "Bash"};
-                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                                 enemies.add(fireDraugr);
                                 break;
                             case FIRE_DEMON:
                                 attacks = new String[]{"Spit", "Bite", "Blind"};
-                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                                 enemies.add(fireDemon);
                                 break;
                             case SMOKESTACK:
                                 attacks = new String[]{"Smoke", "Crush", "Burn"};
-                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, name.toString(), attacks, level * 10);
+                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                                 enemies.add(smokestack);
                                 break;
                         }
                         break;
                     case POISON:
-
+                        pName = (Arrays.stream(PoisonEnemies.values()).toList()).get(rn.nextInt(PoisonEnemies.values().length));
+                        switch (pName) {
+                            case POISON_DRAUGR -> {
+                                attacks = new String[]{"Chop", "Swing", "Bash"};
+                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
+                                enemies.add(fireDraugr);
+                            }
+                            case SNAKE -> {
+                                attacks = new String[]{"Spit", "Bite", "Blind"};
+                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
+                                enemies.add(fireDemon);
+                            }
+                            case SMOKESTACK -> {
+                                attacks = new String[]{"Smoke", "Crush", "Burn"};
+                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
+                                enemies.add(smokestack);
+                            }
+                        }
                         break;
                     case NECROTIC:
                         break;
