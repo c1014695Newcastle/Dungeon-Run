@@ -1,7 +1,4 @@
-import Enums.Difficulty;
-import Enums.FireEnemies;
-import Enums.PoisonEnemies;
-import Enums.Types;
+import Enums.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,7 +64,7 @@ public class Room {
         ArrayList<Enemy> enemies = new ArrayList<>();
         PoisonEnemies pName;
         FireEnemies fName;
-        //NecroticEnemies nName;
+        NecroticEnemies nName;
         for (int x = 0; x < numOfEnemies; x++) {
             int level = rn.nextInt(5) + 1;
             String[] attacks;
@@ -75,21 +72,21 @@ public class Room {
                 case FIRE:
                     fName = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
                     switch (fName) {
-                        case FIRE_DRAUGR:
+                        case FIRE_DRAUGR -> {
                             attacks = new String[]{"Chop", "Swing", "Bash"};
                             Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                             enemies.add(fireDraugr);
-                            break;
-                        case FIRE_DEMON:
+                        }
+                        case FIRE_DEMON -> {
                             attacks = new String[]{"Spit", "Bite", "Blind"};
                             Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                             enemies.add(fireDemon);
-                            break;
-                        case SMOKESTACK:
+                        }
+                        case SMOKESTACK -> {
                             attacks = new String[]{"Smoke", "Crush", "Burn"};
                             Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
                             enemies.add(smokestack);
-                            break;
+                        }
                     }
                     break;
                 case POISON:
@@ -101,7 +98,7 @@ public class Room {
                             enemies.add(poisonDraugr);
                         }
                         case SNAKE -> {
-                            attacks = new String[]{"Spit", "Bite", "Blind"};
+                            attacks = new String[]{"Spit", "Bite", "Strangle"};
                             Enemy snake = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
                             enemies.add(snake);
                         }
@@ -113,7 +110,24 @@ public class Room {
                     }
                     break;
                 case NECROTIC:
-                    break;
+                    nName = (Arrays.stream(NecroticEnemies.values()).toList()).get(rn.nextInt(NecroticEnemies.values().length));
+                    switch (nName) {
+                        case NECROTIC_DRAUGR -> {
+                            attacks = new String[]{"Chop", "Swing", "Bash"};
+                            Enemy poisonDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, nName.toString(), attacks, level * 10);
+                            enemies.add(poisonDraugr);
+                        }
+                        case WOLF -> {
+                            attacks = new String[]{"Spit", "Bite", "Strangle"};
+                            Enemy snake = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, nName.toString(), attacks, level * 10);
+                            enemies.add(snake);
+                        }
+                        case ELF -> {
+                            attacks = new String[]{"Smoke", "Crush", "Burn"};
+                            Enemy troll = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level, nName.toString(), attacks, level * 10);
+                            enemies.add(troll);
+                        }
+                    }
             }
         }
         return enemies;
@@ -157,6 +171,18 @@ public class Room {
                 playerDamage = e.fireDemonAttacks(p);
             } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString().replace("_"," "))){
                 playerDamage = e.smokestackAttacks();
+            } else  if (e.getName().equals(PoisonEnemies.POISON_DRAUGR.toString().replace("_"," "))){
+                playerDamage = e.fireDemonAttacks(p);
+            } else if (e.getName().equals(PoisonEnemies.SNAKE.toString().replace("_"," "))){
+                playerDamage = e.smokestackAttacks();
+            } else  if (e.getName().equals(PoisonEnemies.TROLL.toString().replace("_"," "))){
+                playerDamage = e.fireDemonAttacks(p);
+            } else  if (e.getName().equals(NecroticEnemies.NECROTIC_DRAUGR.toString().replace("_"," "))){
+                playerDamage = e.fireDemonAttacks(p);
+            } else if (e.getName().equals(NecroticEnemies.WOLF.toString().replace("_"," "))){
+                playerDamage = e.smokestackAttacks();
+            } else  if (e.getName().equals(NecroticEnemies.ELF.toString().replace("_"," "))){
+                playerDamage = e.fireDemonAttacks(p);
             }
             GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
             p.setHealth(p.getHealth() - playerDamage);
@@ -258,21 +284,21 @@ class BossRoom extends Room {
                 GameIO.sleep(1000);
                 if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75) && boss.getPhase() != 2) {
                     switch (boss.getName()){
-                        case "Fafnir" -> GameIO.fafClaws();
-                        case "Fenrir" -> GameIO.fenClaws();
-                        case "Jormungandr" -> System.out.println("NA");
+                        case FAFNIR -> GameIO.fafClaws();
+                        case FENRIR -> GameIO.fenClaws();
+                        case JORMUNGANDR -> System.out.println("NA");
                     }
                     boss.setPhase(2);
-                    GameIO.reportSupportEnemies(boss.getName());
+                    GameIO.reportSupportEnemies(boss.getName().toString());
                     phaseBreak(2, boss.getLevel());
                 } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25) && boss.getPhase() != 3) {
                     switch (boss.getName()){
-                        case "Fafnir" -> GameIO.fafFlight();
-                        case "Fenrir" -> GameIO.fenSnarl();
-                        case "Jormungandr" -> System.out.println("NA");
+                        case FAFNIR -> GameIO.fafFlight();
+                        case FENRIR -> GameIO.fenSnarl();
+                        case JORMUNGANDR -> System.out.println("NA");
                     }
                     boss.setPhase(3);
-                    GameIO.reportSupportEnemies(boss.getName());
+                    GameIO.reportSupportEnemies(boss.getName().toString());
                     boss.setBaseDamage(boss.getBaseDamage() * 2);
                     phaseBreak(3, boss.getLevel());
                 }
@@ -284,27 +310,27 @@ class BossRoom extends Room {
                     switch (boss.getPhase()) {
                         case 1 -> {
                             switch (boss.getName()){
-                                case "Fafnir" -> damage = boss.fafPhaseOneAttack(p);
-                                case "Fenrir" -> damage = 0;
-                                case "Jormungandr" -> damage = 0;
+                                case FAFNIR -> damage = boss.fafPhaseOneAttack(p);
+                                case FENRIR -> damage = boss.fenPhaseOneAttack(p);
+                                case JORMUNGANDR -> damage = 0;
                             }
                             GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
                             p.setHealth(p.getHealth() - damage);
                         }
                         case 2 -> {
                             switch (boss.getName()){
-                                case "Fafnir" -> damage = boss.fafPhaseTwoAttack(p);
-                                case "Fenrir" -> damage = 0;
-                                case "Jormungandr" -> damage = 0;
+                                case FAFNIR -> damage = boss.fafPhaseTwoAttack(p);
+                                case FENRIR -> damage = boss.fenPhaseTwoAttack(p);
+                                case JORMUNGANDR -> damage = 0;
                             }
                             GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
                             p.setHealth(p.getHealth() - damage);
                         }
                         case 3 -> {
                             switch (boss.getName()){
-                                case "Fafnir" -> damage = boss.fafPhaseThreeAttack(p);
-                                case "Fenrir" -> damage = 0;
-                                case "Jormungandr" -> damage = 0;
+                                case FAFNIR -> damage = boss.fafPhaseThreeAttack(p);
+                                case FENRIR -> damage = boss.fenPhaseThreeAttack(p);
+                                case JORMUNGANDR -> damage = 0;
                             }
                             GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
                             p.setHealth(p.getHealth() - damage);
@@ -314,21 +340,21 @@ class BossRoom extends Room {
                         GameIO.playerDies();
                     }
                 } else {
-                    System.out.println("YOU KILLED FAFNIR");
+                    System.out.println("YOU KILLED " + boss.getName());
                     endEncounter(p);
                 }
             } else {
                 switch (boss.getName()){
-                    case "Fafnir" -> GameIO.fafPhaseBattle();
-                    case "Fenrir" -> GameIO.fenPhaseBattle();
-                    case "Jormungandr" -> GameIO.jorPhaseBattle();
+                    case FAFNIR -> GameIO.fafPhaseBattle();
+                    case FENRIR -> GameIO.fenPhaseBattle();
+                    case JORMUNGANDR -> GameIO.jorPhaseBattle();
                 }
                 startEncounter(p);
                 p.powerUp();
                 switch (boss.getName()){
-                    case "Fafnir" -> GameIO.fafVulnerable();
-                    case "Fenrir" -> GameIO.fenVulnerable();
-                    case "Jormungandr" -> GameIO.jorVulnerable();
+                    case FAFNIR -> GameIO.fafVulnerable();
+                    case FENRIR -> GameIO.fenVulnerable();
+                    case JORMUNGANDR -> GameIO.jorVulnerable();
                 }
             }
         }
@@ -352,27 +378,27 @@ class BossRoom extends Room {
             int[] castDamage = p.cast();
             for (int x : castDamage) {
                 if (boss.getPhase() == 3 && rn.nextInt(5) <=3) {
-                    GameIO.recordMiss(boss.getName());
+                    GameIO.recordMiss(boss.getName().toString());
                 } else {
                     boss.setHealth(boss.getHealth() - x);
-                    GameIO.chopReport(boss.getName(), x);
+                    GameIO.chopReport(boss.getName().toString(), x);
                 }
             }
         } else if (choice.equals("2")) { // Chop
             damage = p.chop();
             if (boss.getPhase() == 3 && rn.nextInt(5) <=3) {
-                GameIO.recordMiss(boss.getName());
+                GameIO.recordMiss(boss.getName().toString());
             } else {
                 boss.setHealth(boss.getHealth() - damage);
-                GameIO.chopReport(boss.getName(), damage);
+                GameIO.chopReport(boss.getName().toString(), damage);
             }
         } else { // Swing
             damage = p.swing();
             if (boss.getPhase() == 3 && rn.nextInt(5) <= 3) {
-                GameIO.recordMiss(boss.getName());
+                GameIO.recordMiss(boss.getName().toString());
             } else {
                 boss.setHealth(boss.getHealth() - damage);
-                GameIO.chopReport(boss.getName(), damage);
+                GameIO.chopReport(boss.getName().toString(), damage);
             }
         }
         p.checkDebuffs();
@@ -393,7 +419,7 @@ class BossRoom extends Room {
     }
 
     public static void main(String[] args) {
-        Boss d = new Boss(1, "Fafnir");
+        Boss d = new Boss(1, Boss.bossName.FAFNIR);
         Player p = new Player("LUKE");
         BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, d);
         b.bossEncounter(p);
