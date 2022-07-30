@@ -1,3 +1,4 @@
+import Enums.Difficulty;
 import Enums.Types;
 
 import java.util.ArrayList;
@@ -181,7 +182,7 @@ public class Boss {
     public static void main(String[] args) {
         Boss d = new Boss(1, "Fafnir");
         Player p = new Player("Luke");
-        BossRoom b = new BossRoom(1, 1, Types.FIRE, d);
+        BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, d);
         b.bossEncounter(p);
     }
 

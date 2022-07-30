@@ -1,3 +1,4 @@
+import Enums.Difficulty;
 import Enums.FireEnemies;
 import Enums.PoisonEnemies;
 import Enums.Types;
@@ -9,15 +10,15 @@ import java.util.Random;
 public class Room {
     private int ID;
     private ArrayList<Enemy> waveOne;
-    private int difficulty;
+    private Difficulty difficulty;
     private Types type;
 
 
-    public Room(int ID, int difficulty, Types type, int numOfEnemies) {
+    public Room(int ID, Difficulty difficulty, Types type, int numOfEnemies) {
         this.ID = ID;
         this.difficulty = difficulty;
         this.type = type;
-        this.waveOne = generateEnemies(numOfEnemies, type, difficulty);
+        this.waveOne = generateEnemies(numOfEnemies, type);
 
 
     }
@@ -38,11 +39,11 @@ public class Room {
         this.waveOne = waveOne;
     }
 
-    public int getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(int difficulty) {
+    public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
@@ -59,63 +60,60 @@ public class Room {
      * Generates the enemies for the room encounter based on the set difficulty of the room, the number of enemies and the type of encounter this is
      * @param numOfEnemies the number of enemies which should spawn in this encounter
      * @param type the type of encounter, whether it be flame, poison or necrotic
-     * @param difficulty the difficulty of this room as a set number, 1 - easy, 2 - med, 3 - hard
      * @return the list of enemies for this encounter.
      */
-    private ArrayList<Enemy> generateEnemies(int numOfEnemies, Types type, int difficulty) {
+    private ArrayList<Enemy> generateEnemies(int numOfEnemies, Types type) {
         Random rn = new Random();
         ArrayList<Enemy> enemies = new ArrayList<>();
         PoisonEnemies pName;
         FireEnemies fName;
-        //PoisonEnemies nName;
+        //NecroticEnemies nName;
         for (int x = 0; x < numOfEnemies; x++) {
             int level = rn.nextInt(5) + 1;
             String[] attacks;
-            if (difficulty == 1) {
-                switch (type) {
-                    case FIRE:
-                        fName = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
-                        switch (fName) {
-                            case FIRE_DRAUGR:
-                                attacks = new String[]{"Chop", "Swing", "Bash"};
-                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
-                                enemies.add(fireDraugr);
-                                break;
-                            case FIRE_DEMON:
-                                attacks = new String[]{"Spit", "Bite", "Blind"};
-                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
-                                enemies.add(fireDemon);
-                                break;
-                            case SMOKESTACK:
-                                attacks = new String[]{"Smoke", "Crush", "Burn"};
-                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
-                                enemies.add(smokestack);
-                                break;
+            switch (type) {
+                case FIRE:
+                    fName = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
+                    switch (fName) {
+                        case FIRE_DRAUGR:
+                            attacks = new String[]{"Chop", "Swing", "Bash"};
+                            Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
+                            enemies.add(fireDraugr);
+                            break;
+                        case FIRE_DEMON:
+                            attacks = new String[]{"Spit", "Bite", "Blind"};
+                            Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
+                            enemies.add(fireDemon);
+                            break;
+                        case SMOKESTACK:
+                            attacks = new String[]{"Smoke", "Crush", "Burn"};
+                            Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, fName.toString(), attacks, level * 10);
+                            enemies.add(smokestack);
+                            break;
+                    }
+                    break;
+                case POISON:
+                    pName = (Arrays.stream(PoisonEnemies.values()).toList()).get(rn.nextInt(PoisonEnemies.values().length));
+                    switch (pName) {
+                        case POISON_DRAUGR -> {
+                            attacks = new String[]{"Chop", "Swing", "Bash"};
+                            Enemy poisonDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
+                            enemies.add(poisonDraugr);
                         }
-                        break;
-                    case POISON:
-                        pName = (Arrays.stream(PoisonEnemies.values()).toList()).get(rn.nextInt(PoisonEnemies.values().length));
-                        switch (pName) {
-                            case POISON_DRAUGR -> {
-                                attacks = new String[]{"Chop", "Swing", "Bash"};
-                                Enemy fireDraugr = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
-                                enemies.add(fireDraugr);
-                            }
-                            case SNAKE -> {
-                                attacks = new String[]{"Spit", "Bite", "Blind"};
-                                Enemy fireDemon = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
-                                enemies.add(fireDemon);
-                            }
-                            case SMOKESTACK -> {
-                                attacks = new String[]{"Smoke", "Crush", "Burn"};
-                                Enemy smokestack = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
-                                enemies.add(smokestack);
-                            }
+                        case SNAKE -> {
+                            attacks = new String[]{"Spit", "Bite", "Blind"};
+                            Enemy snake = new Enemy(x + 1, level, 15 + level * 5, 15 + level * 5, level, pName.toString(), attacks, level * 10);
+                            enemies.add(snake);
                         }
-                        break;
-                    case NECROTIC:
-                        break;
-                }
+                        case TROLL -> {
+                            attacks = new String[]{"Smoke", "Crush", "Burn"};
+                            Enemy troll = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level, pName.toString(), attacks, level * 10);
+                            enemies.add(troll);
+                        }
+                    }
+                    break;
+                case NECROTIC:
+                    break;
             }
         }
         return enemies;
@@ -217,23 +215,13 @@ public class Room {
         p.removeDebuffs();
     }
 
-    private String translateDifficulty(int difficulty){
-        String diff = "";
-        if (difficulty == 0){
-            diff = "Empty";
-        } else if (difficulty == 1){
-            diff = "Easy ";
-        } else if (difficulty == 2) {
-            diff = "Med  ";
-        } else if (difficulty == 3){
-            diff = "Hard ";
-        } else {
-            diff = "BLOCK";
-        }
-        return diff;
+    public static void main(String[] args) {
+        Room r = new Room(1, Difficulty.LOW, Types.FIRE, 3);
+        System.out.println(r);
     }
+
     public String toString(){
-        return "[ " + ID + " " + type + " " + translateDifficulty(difficulty) + " ]";
+        return "[ " + ID + " " + type + " " + difficulty + " ]";
     }
 
 }
@@ -249,7 +237,7 @@ class BossRoom extends Room {
         this.boss = boss;
     }
 
-    public BossRoom(int ID, int difficulty, Types type, Boss boss) {
+    public BossRoom(int ID, Difficulty difficulty, Types type, Boss boss) {
         super(ID, difficulty, type, 0);
         this.boss = boss;
     }
@@ -407,7 +395,7 @@ class BossRoom extends Room {
     public static void main(String[] args) {
         Boss d = new Boss(1, "Fafnir");
         Player p = new Player("LUKE");
-        BossRoom b = new BossRoom(1, 2, Types.FIRE, d);
+        BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, d);
         b.bossEncounter(p);
     }
 

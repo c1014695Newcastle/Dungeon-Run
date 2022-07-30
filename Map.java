@@ -1,3 +1,4 @@
+import Enums.Difficulty;
 import Enums.Types;
 
 import java.text.SimpleDateFormat;
@@ -28,49 +29,49 @@ public class Map {
                 int randNum = ran.nextInt(4) + 1;
                 if (y == 0 || y == 1) {
                     if (x == 0 || y == 0){
-                        Room r = new Room(ID, 1, Types.FIRE, 3);
+                        Room r = new Room(ID, Difficulty.LOW, Types.FIRE, 3);
                         rooms[x][y] = r;
                         ID++;
                     } else {
                         if (randNum == 3 || randNum == 4) {
-                            Room r = new Room(ID, 0, Types.FIRE, 0);
+                            Room r = new Room(ID, Difficulty.EMPTY, Types.FIRE, 0);
                             rooms[x][y] = r;
                             ID++;
                         } else if (randNum == 1) {
-                            Room r = new Room(ID, 4, Types.FIRE, 0);
+                            Room r = new Room(ID, Difficulty.BLOCKED, Types.FIRE, 0);
                             rooms[x][y] = r;
                             ID++;
                         } else {
-                            Room r = new Room(ID, 1, Types.FIRE, 3);
+                            Room r = new Room(ID, Difficulty.LOW, Types.FIRE, 3);
                             rooms[x][y] = r;
                             ID++;
                         }
                     }
                 } else if (y == 2) {
                     if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.POISON, 0);
+                        Room r = new Room(ID, Difficulty.EMPTY, Types.POISON, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.POISON, 0);
+                        Room r = new Room(ID, Difficulty.BLOCKED, Types.POISON, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else {
-                        Room r = new Room(ID, 2, Types.POISON, 4);
+                        Room r = new Room(ID, Difficulty.MEDIUM, Types.POISON, 4);
                         rooms[x][y] = r;
                         ID++;
                     }
                 } else {
                     if (randNum == 3 || randNum == 4) {
-                        Room r = new Room(ID, 0, Types.NECROTIC, 0);
+                        Room r = new Room(ID, Difficulty.EMPTY, Types.NECROTIC, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else if (randNum == 1) {
-                        Room r = new Room(ID, 4, Types.NECROTIC, 0);
+                        Room r = new Room(ID, Difficulty.BLOCKED, Types.NECROTIC, 0);
                         rooms[x][y] = r;
                         ID++;
                     } else {
-                        Room r = new Room(ID, 3, Types.NECROTIC, 5);
+                        Room r = new Room(ID, Difficulty.HARD, Types.NECROTIC, 5);
                         rooms[x][y] = r;
                         ID++;
                     }
@@ -108,13 +109,13 @@ public class Map {
         while (!path) {
                 if (x == 4) {
                     return true;
-                } else if (isLegal(x + 1, y) && rooms[x + 1][y].getDifficulty() != 4) {
+                } else if (isLegal(x + 1, y) && rooms[x + 1][y].getDifficulty() != Difficulty.BLOCKED) {
                     path = checkMap(x + 1, y);
-                } else if (isLegal(x - 1, y) && rooms[x - 1][y].getDifficulty() != 4) {
+                } else if (isLegal(x - 1, y) && rooms[x - 1][y].getDifficulty() != Difficulty.BLOCKED) {
                     path = checkMap(x + 1, y);
-                } else if (isLegal(x, y + 1) && rooms[x][y + 1].getDifficulty() != 4) {
+                } else if (isLegal(x, y + 1) && rooms[x][y + 1].getDifficulty() != Difficulty.BLOCKED) {
                     path = checkMap(x + 1, y);
-                } else if (isLegal(x, y - 1) && rooms[x][y - 1].getDifficulty() != 4) {
+                } else if (isLegal(x, y - 1) && rooms[x][y - 1].getDifficulty() != Difficulty.BLOCKED) {
                     path = checkMap(x + 1, y);
                 } else {
                     return false;
@@ -158,7 +159,7 @@ public class Map {
                 if (roomtype != r.getType()) {
                     switch (roomtype){
                         case FIRE -> {
-                            BossRoom b = new BossRoom(1, 1, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
+                            BossRoom b = new BossRoom(1, Difficulty.LOW, Types.FIRE, new Boss(p.getLevel(), "Fafnir"));
                             b.bossEncounter(p);
                         }
                         case NECROTIC -> {

@@ -213,7 +213,7 @@ public class GameIO {
         sleep(1000);
         System.out.println("\nYOU ARE NOW LEVEL " + newLevel);
         System.out.println("\tHEALTH +" + (newLevel * 10));
-        System.out.println("\tCAST DAMAGE +" + (newLevel * 5) + "\n\tCHOP DAMAGE +" + (newLevel * 5) + "\n\tSWING DAMAGE +" + (newLevel * 5) + "\n");
+        System.out.println("\tCAST DAMAGE +" + (newLevel * 2) + "\n\tCHOP DAMAGE +" + (newLevel * 2) + "\n\tSWING DAMAGE +" + (newLevel * 2) + "\n");
     }
 
     /**
@@ -221,7 +221,7 @@ public class GameIO {
      * @param poisoned the player's poison debuff - true means player takes lesser roll
      * @param burning the player's burning debuff - true means player takes lesser roll
      * @param necrosis the player's necrosis debuff - true means player takes lesser roll
-     * @return
+     * @return the player's dice roll
      */
     public static int playerRoll(boolean poisoned, boolean burning, boolean necrosis){
         System.out.print("Press enter to roll the dice");
