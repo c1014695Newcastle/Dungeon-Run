@@ -113,7 +113,7 @@ public class GameIO {
     }
 
     /**
-     * Vallidation method to check if the user input falls within acceptable parameters, such as not containing any characters that are not numbers or goes beyond the limit of the choice scope.
+     * Validation method to check if the user input falls within acceptable parameters, such as not containing any characters that are not numbers or goes beyond the limit of the choice scope.
      * @param choice the player's choice input
      * @param numOfChoices the number of choices
      * @return true or false depending on whether the player input is acceptable or not, if true then the player will be asked to re-enter their choice.
