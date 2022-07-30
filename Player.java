@@ -233,9 +233,9 @@ public class Player {
             GameIO.reportLevelUp(newLevel, newLevel - level);
             setHealth(getHealth() + ((newLevel - level) * 10));
             setPossibleHealth(getHealth());
-            setCastDamage(getCastDamage() + ((newLevel - level) * 5));
-            setChopDamage(getChopDamage() + ((newLevel - level) * 5));
-            setSwingDamage(getSwingDamage() + ((newLevel - level) * 5));
+            setCastDamage(getCastDamage() + ((newLevel - level) * 2));
+            setChopDamage(getChopDamage() + ((newLevel - level) * 2));
+            setSwingDamage(getSwingDamage() + ((newLevel - level) * 2));
             setLevel(newLevel);
         }
     }
