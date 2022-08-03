@@ -69,7 +69,7 @@ public class Room {
             int level = rn.nextInt(5) + 1;
             String[] attacks;
             switch (type) {
-                case FIRE:
+                case FIRE -> {
                     fName = (Arrays.stream(FireEnemies.values()).toList()).get(rn.nextInt(FireEnemies.values().length));
                     switch (fName) {
                         case FIRE_DRAUGR -> {
@@ -88,8 +88,8 @@ public class Room {
                             enemies.add(smokestack);
                         }
                     }
-                    break;
-                case POISON:
+                }
+                case POISON -> {
                     pName = (Arrays.stream(PoisonEnemies.values()).toList()).get(rn.nextInt(PoisonEnemies.values().length));
                     switch (pName) {
                         case POISON_DRAUGR -> {
@@ -108,8 +108,8 @@ public class Room {
                             enemies.add(troll);
                         }
                     }
-                    break;
-                case NECROTIC:
+                }
+                case NECROTIC -> {
                     nName = (Arrays.stream(NecroticEnemies.values()).toList()).get(rn.nextInt(NecroticEnemies.values().length));
                     switch (nName) {
                         case NECROTIC_DRAUGR -> {
@@ -128,6 +128,7 @@ public class Room {
                             enemies.add(troll);
                         }
                     }
+                }
             }
         }
         return enemies;
@@ -172,16 +173,16 @@ public class Room {
             } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString().replace("_"," "))){
                 playerDamage = e.smokestackAttacks();
             } else  if (e.getName().equals(PoisonEnemies.POISON_DRAUGR.toString().replace("_"," "))){
-                playerDamage = e.fireDemonAttacks(p);
-            } else if (e.getName().equals(PoisonEnemies.SNAKE.toString().replace("_"," "))){
+                playerDamage = e.pDraugrAttacks(p);
+            } else if (e.getName().equals(PoisonEnemies.SNAKE.toString())){
                 playerDamage = e.smokestackAttacks();
-            } else  if (e.getName().equals(PoisonEnemies.TROLL.toString().replace("_"," "))){
+            } else  if (e.getName().equals(PoisonEnemies.TROLL.toString())){
                 playerDamage = e.fireDemonAttacks(p);
             } else  if (e.getName().equals(NecroticEnemies.NECROTIC_DRAUGR.toString().replace("_"," "))){
-                playerDamage = e.fireDemonAttacks(p);
-            } else if (e.getName().equals(NecroticEnemies.WOLF.toString().replace("_"," "))){
+                playerDamage = e.nDraugrAttacks(p);
+            } else if (e.getName().equals(NecroticEnemies.WOLF.toString())){
                 playerDamage = e.smokestackAttacks();
-            } else  if (e.getName().equals(NecroticEnemies.ELF.toString().replace("_"," "))){
+            } else  if (e.getName().equals(NecroticEnemies.ELF.toString())){
                 playerDamage = e.fireDemonAttacks(p);
             }
             GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
