@@ -77,7 +77,7 @@ public class Boss {
         this.level = level;
         this.possibleHealth = 200 + (level * 50);
         this.health = possibleHealth;
-        this.baseDamage = level * 20;
+        this.baseDamage = 10 + level * 5;
         this.name = name;
         this.xp = level * 50;
         this.phase = 1;
