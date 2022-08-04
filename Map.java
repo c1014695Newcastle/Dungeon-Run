@@ -150,6 +150,7 @@ public class Map {
                 System.out.println(x);
                 System.out.println("ENCOUNTER CLEARED");
                 r.endEncounter(p);
+                r.setVisited(true);
                 x = checkRoom(r);
                 Types roomtype = r.getType();
                 System.out.println(this.toString(r.getID()));
