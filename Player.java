@@ -3,7 +3,8 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Player {
-    private String name;
+    private int lives;
+    private final String name;
     private int level;
     private int possibleHealth;
     private int health;
@@ -20,6 +21,7 @@ public class Player {
     private int xp;
 
     public Player(String name) {
+        this.lives = 0;
         this.name = name;
         this.xp = 0;
         this.level = 1;
@@ -38,10 +40,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getLevel() {
@@ -238,6 +236,27 @@ public class Player {
             setSwingDamage(getSwingDamage() + ((newLevel - level) * 2));
             setLevel(newLevel);
         }
+    }
+
+    public void whetstone(){
+        GameIO.reportWhetstone();
+        chopDamage += 10;
+        swingDamage += 10;
+    }
+
+    public void addArmour(int newArmour){
+        GameIO.reportArmour(newArmour);
+        armour += newArmour;
+    }
+
+    public void monsterHeart(){
+        GameIO.reportMonsterHeart();
+        possibleHealth += 25;
+    }
+
+    public void rune(){
+        GameIO.reportRune();
+        castDamage += 5;
     }
 
     @Override

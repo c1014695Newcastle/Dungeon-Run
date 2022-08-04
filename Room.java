@@ -5,10 +5,16 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Room {
+    private enum Reward {
+        EMPTY, HELMET, CHESTPIECE, WHETSTONE, RUNE,  MONSTER_HEART
+    }
+
     private int ID;
     private ArrayList<Enemy> waveOne;
     private Difficulty difficulty;
     private Types type;
+    private final Reward reward;
+    private boolean visited;
 
 
     public Room(int ID, Difficulty difficulty, Types type, int numOfEnemies) {
@@ -16,9 +22,10 @@ public class Room {
         this.difficulty = difficulty;
         this.type = type;
         this.waveOne = generateEnemies(numOfEnemies, type);
-
-
+        this.reward = generateReward();
+        this.visited = false;
     }
+
 
     public int getID() {
         return ID;
@@ -51,6 +58,42 @@ public class Room {
     public void setType(Types type) {
         this.type = type;
     }
+
+    public Reward getReward(){
+        return reward;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    private Reward generateReward(){
+        Random rn = new Random();
+        int roll = rn.nextInt(9);
+        if (roll < 2){
+            //20% chance
+            return Reward.EMPTY;
+        } else if (roll == 2){
+            //10% chance
+            return Reward.HELMET;
+        } else if (roll <= 4){
+            //20% chance
+            return Reward.CHESTPIECE;
+        } else if (roll <= 6) {
+            //20% chance
+            return Reward.RUNE;
+        } else if (roll == 7){
+            //10% chance
+            return Reward.WHETSTONE;
+        } else {
+            return Reward.MONSTER_HEART;
+        }
+    }
+
 
 
     /**
@@ -157,6 +200,15 @@ public class Room {
                 GameIO.playerDies();
             }
         }
+        if (!visited){
+            switch (reward){
+                case WHETSTONE -> p.whetstone();
+                case CHESTPIECE -> p.addArmour(50);
+                case HELMET -> p.addArmour(20);
+                case MONSTER_HEART -> p.monsterHeart();
+                case RUNE -> p.rune();
+            }
+        }
     }
 
     /**
@@ -185,8 +237,15 @@ public class Room {
             } else  if (e.getName().equals(NecroticEnemies.ELF.toString())){
                 playerDamage = e.fireDemonAttacks(p);
             }
-            GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
-            p.setHealth(p.getHealth() - playerDamage);
+            if (p.getArmour() == 0) {
+                GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
+                p.setHealth(p.getHealth() - playerDamage);
+            } else if (p.getArmour() == playerDamage) {
+                p.setArmour(0);
+            } else {
+                p.setHealth(p.getHealth() - (playerDamage - p.getArmour()));
+                p.setArmour(0);
+            }
         }
     }
 

@@ -118,6 +118,23 @@ public class Enemy {
         }
     }
 
+    protected int draugrNecroticDamageAttack(Player p, Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll <= 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 2;
+        } else if (roll < 8) {
+            return baseDamage + 5;
+        } else {
+            p.setNecrosis(true);
+            p.setDebuffCounter(3);
+            return baseDamage + 7;
+        }
+    }
+
     protected int draugrStandardDamageAttack(Random rn){
         int roll = rn.nextInt(10) + 1;
         if (roll == 1){
@@ -237,16 +254,36 @@ public class Enemy {
         }
     }
 
-    public int enemyAttack(Player p){
-        int playerDamage = 0;
-        if (name.equals(FireEnemies.FIRE_DRAUGR.toString())){
-            playerDamage = draugrAttacks(p);
-        } else  if (name.equals(FireEnemies.FIRE_DEMON.toString())){
-            playerDamage = fireDemonAttacks(p);
-        } else if (name.equals(FireEnemies.SMOKESTACK.toString())){
-            playerDamage = smokestackAttacks();
+    protected int pDraugrAttacks(Player p){
+        Random rn = new Random();
+        String[] attacks = getAttacks();
+        String attack = attacks[rn.nextInt(attacks.length)];
+        if (attack.equals("Chop")){
+            GameIO.reportAttack("Draugr", "Chop");
+            return draugrPoisonDamageAttack(p, rn);
+        } else if (attack.equals("Swing")){
+            GameIO.reportAttack("Draugr", "Swing");
+            return draugrPoisonDamageAttack(p, rn);
+        } else {
+            GameIO.reportAttack("Draugr", "Bash");
+            return draugrStandardDamageAttack(rn);
         }
-        return playerDamage;
+    }
+
+    protected int nDraugrAttacks(Player p){
+        Random rn = new Random();
+        String[] attacks = getAttacks();
+        String attack = attacks[rn.nextInt(attacks.length)];
+        if (attack.equals("Chop")){
+            GameIO.reportAttack("Draugr", "Chop");
+            return draugrNecroticDamageAttack(p, rn);
+        } else if (attack.equals("Swing")){
+            GameIO.reportAttack("Draugr", "Swing");
+            return draugrNecroticDamageAttack(p, rn);
+        } else {
+            GameIO.reportAttack("Draugr", "Bash");
+            return draugrStandardDamageAttack(rn);
+        }
     }
 
     @Override

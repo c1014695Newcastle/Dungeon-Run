@@ -216,6 +216,25 @@ public class GameIO {
         System.out.println("\tCAST DAMAGE +" + (newLevel * 2) + "\n\tCHOP DAMAGE +" + (newLevel * 2) + "\n\tSWING DAMAGE +" + (newLevel * 2) + "\n");
     }
 
+    public static void reportRune(){
+        System.out.println("A NEW RUNE SHARPENS YOUR MAGIC SKILL!\n\t+5 CAST DAMAGE");
+    }
+
+    public static void reportMonsterHeart(){
+        System.out.println("YOU CONSUME THE HEART OF A SLAIN FOE!\n\t+25 HEALTH");
+    }
+
+    public static void reportWhetstone(){
+        System.out.println("YOU FIND A WHETSTONE TO SHARPEN YOUR BLADE!\n\t+10 CHOP DAMAGE\n\t+10 SWING DAMAGE");
+    }
+
+    public static void reportArmour(int armour){
+        switch (armour){
+            case 20 -> System.out.println("YOU FOUND A HELMET!\n\t+20 ARMOUR");
+            case 50 -> System.out.println("YOU FOUND A HELMET!\n\t+50 ARMOUR");
+        }
+    }
+
     /**
      * Method to allow the player to roll a dice to determine their attack damage, player rolls two dice and will always take the first unless disadvantage debuffs are in play, which means the player must take the lower of the two rolls
      * @param poisoned the player's poison debuff - true means player takes lesser roll
