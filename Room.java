@@ -146,7 +146,7 @@ public class Room {
                             enemies.add(snake);
                         }
                         case TROLL -> {
-                            attacks = new String[]{"Smoke", "Crush", "Burn"};
+                            attacks = new String[]{"Bash", "Stomp", "Punch"};
                             Enemy troll = new Enemy(x + 1, level, 15 + level * 10, 15 + level * 10, level, pName.toString(), attacks, level * 10);
                             enemies.add(troll);
                         }
@@ -227,9 +227,9 @@ public class Room {
             } else  if (e.getName().equals(PoisonEnemies.POISON_DRAUGR.toString().replace("_"," "))){
                 playerDamage = e.pDraugrAttacks(p);
             } else if (e.getName().equals(PoisonEnemies.SNAKE.toString())){
-                playerDamage = e.smokestackAttacks();
+                playerDamage = e.snakeAttacks(p);
             } else  if (e.getName().equals(PoisonEnemies.TROLL.toString())){
-                playerDamage = e.fireDemonAttacks(p);
+                playerDamage = e.trollAttacks(p);
             } else  if (e.getName().equals(NecroticEnemies.NECROTIC_DRAUGR.toString().replace("_"," "))){
                 playerDamage = e.nDraugrAttacks(p);
             } else if (e.getName().equals(NecroticEnemies.WOLF.toString())){
@@ -326,6 +326,11 @@ class BossRoom extends Room {
      */
     public void bossEncounter(Player p) {
         Random rn = new Random();
+        switch (boss.getName()){
+            case FAFNIR -> GameIO.fafIntro();
+            case FENRIR -> GameIO.fenIntro();
+            case JORMUNGANDR -> GameIO.jorIntro();
+        }
         while (boss.getHealth() > 0 && p.getHealth() > 0) {
             System.out.println(p);
             GameIO.sleep(1000);
