@@ -377,4 +377,20 @@ public class GameIO {
     public static void main(String[] args) {
         reportLevelUp(3,2);
     }
+
+    public static void fafIntro() {
+        System.out.println("\nYou enter a large... seemingly empty cavern full of gold....\n");
+        sleep(1000);
+        System.out.println("\nYou start to walk over the mound of coins to the other side...\n");
+        sleep(1000);
+        System.out.println("\nYou feel the coins start to rumble...\n");
+        sleep(2000);
+        System.out.println("\nFAFNIR THE GREAT DRAGON BLOCKS YOUR PATH!!!\n\n\n");
+    }
+
+    public static void fenIntro() {
+    }
+
+    public static void jorIntro() {
+    }
 }
