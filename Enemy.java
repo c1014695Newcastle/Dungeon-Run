@@ -166,6 +166,53 @@ public class Enemy {
         }
     }
 
+    protected int snakeAttacks(Player p) {
+        Random rn = new Random();
+        String attack = attacks[rn.nextInt(attacks.length)];
+        if (attack.equals("Spit")){
+            GameIO.reportAttack(name, "Spit");
+            return snakePoisonAttack(p, rn);
+        } else if (attack.equals("Bite")){
+            GameIO.reportAttack(name, "Bite");
+            return snakePoisonAttack(p, rn);
+        } else {
+            GameIO.reportAttack(name, "Strangle");
+            return snakeStandardAttack(rn);
+        }
+    }
+
+    private int snakePoisonAttack(Player p, Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll <= 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 3;
+        } else if (roll < 8) {
+            return baseDamage + 4;
+        } else {
+            p.setPoisoned(true);
+            p.setDebuffCounter(3);
+            return baseDamage + 5;
+        }
+    }
+
+    private int snakeStandardAttack(Random rn){
+        int roll = rn.nextInt(10) + 1;
+        if (roll == 1){
+            return 0;
+        } else if (roll < 4){
+            return baseDamage;
+        } else if (roll < 6) {
+            return baseDamage + 1;
+        } else if (roll < 8) {
+            return baseDamage + 2;
+        } else {
+            return baseDamage + 5;
+        }
+    }
+
     public int fireDemonAttacks(Player p) {
         Random rn = new Random();
         String[] attacks = getAttacks();
@@ -286,6 +333,21 @@ public class Enemy {
         }
     }
 
+    protected int trollAttacks(Player p){
+        Random rn = new Random();
+        String attack = attacks[rn.nextInt(attacks.length)];
+        if (attack.equals("Chop")){
+            GameIO.reportAttack(name, "Bash");
+            return draugrStandardDamageAttack(rn);
+        } else if (attack.equals("Swing")){
+            GameIO.reportAttack(name, "Stomp");
+            return draugrStandardDamageAttack(rn);
+        } else {
+            GameIO.reportAttack(name, "Punch");
+            return draugrStandardDamageAttack(rn);
+        }
+    }
+
     @Override
     public String toString() {
         String healthBar = GameIO.playerHealthBar(health, possibleHealth);
@@ -294,6 +356,8 @@ public class Enemy {
         return topBar +
                  "\tLevel " + level + " " + name.replace("_"," ") + "\n"  + "\tHealth: " + healthBar + "\n    "+ health + "\\" + possibleHealth + "\n"  +bottomBar;
     }
+
+
 }
 
 
