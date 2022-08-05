@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Room {
     private enum Reward {
-        EMPTY, HELMET, CHESTPIECE, WHETSTONE, RUNE,  MONSTER_HEART
+        EMPTY, HELMET, CHESTPIECE, WHETSTONE, RUNE,  MONSTER_HEART, EXTRA_LIFE
     }
 
     private int ID;
@@ -73,7 +73,7 @@ public class Room {
 
     private Reward generateReward(){
         Random rn = new Random();
-        int roll = rn.nextInt(9);
+        int roll = rn.nextInt(11);
         if (roll < 2){
             //20% chance
             return Reward.EMPTY;
@@ -89,8 +89,10 @@ public class Room {
         } else if (roll == 7){
             //10% chance
             return Reward.WHETSTONE;
-        } else {
+        } else if (roll <= 9){
             return Reward.MONSTER_HEART;
+        } else {
+            return Reward.EXTRA_LIFE;
         }
     }
 
@@ -207,6 +209,7 @@ public class Room {
                 case HELMET -> p.addArmour(20);
                 case MONSTER_HEART -> p.monsterHeart();
                 case RUNE -> p.rune();
+                case EXTRA_LIFE -> p.extraLife();
             }
         }
     }

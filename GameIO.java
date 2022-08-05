@@ -393,4 +393,7 @@ public class GameIO {
 
     public static void jorIntro() {
     }
+
+    public static void reportExtraLife() {
+    }
 }

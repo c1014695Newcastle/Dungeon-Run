@@ -1,7 +1,3 @@
-import java.util.Arrays;
-import java.util.Random;
-import java.util.TreeMap;
-
 public class Player {
     private int lives;
     private final String name;
@@ -36,6 +32,14 @@ public class Player {
         this.burning = false;
         this.debuffCounter = 0;
         this.necrosis = false;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public String getName() {
@@ -150,7 +154,6 @@ public class Player {
      * @return the attack damage against the enemy
      */
     public int chop(){
-        Random rn = new Random();
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
         return damageDecider(chopDamage, roll);
     }
@@ -160,8 +163,7 @@ public class Player {
      * @return the attack damage of all three separate casts
      */
     public int[] cast(){
-        Random rn = new Random();
-        int roll;;
+        int roll;
         int[] damage = {0,0,0};
         for (int x = 0; x < 3; x ++){
             roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
@@ -238,25 +240,30 @@ public class Player {
         }
     }
 
-    public void whetstone(){
+    protected void whetstone(){
         GameIO.reportWhetstone();
         chopDamage += 10;
         swingDamage += 10;
     }
 
-    public void addArmour(int newArmour){
+    protected void addArmour(int newArmour){
         GameIO.reportArmour(newArmour);
         armour += newArmour;
     }
 
-    public void monsterHeart(){
+    void monsterHeart(){
         GameIO.reportMonsterHeart();
         possibleHealth += 25;
     }
 
-    public void rune(){
+    protected void rune(){
         GameIO.reportRune();
         castDamage += 5;
+    }
+
+    protected void extraLife(){
+        GameIO.reportExtraLife();
+        lives++;
     }
 
     protected void takeDamage(int damage) {
@@ -280,7 +287,7 @@ public class Player {
         String topBar = GameIO.topBorder(healthBar.length());
         String bottomBar = GameIO.bottomBorder(healthBar.length());
         return  topBar + name + " Level " + level + "\n" +
-                "  " + healthBar + "\n  " + health + "\\" + possibleHealth + "\n" + "  XP: " + xp + "\n" +
+                "  " + healthBar + "\n  " + health + "\\" + possibleHealth + "\n" + "  XP: " + xp + "\t\t" + "Lives: " + lives + "\n" +
        bottomBar;
     }
 
