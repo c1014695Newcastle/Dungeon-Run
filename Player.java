@@ -263,12 +263,12 @@ public class Player {
         if (getArmour() == 0) {
             GameIO.damageReport(damage, isPoisoned(), isBurning(), isBurning());
             setHealth(getHealth() - damage);
-        } else if (getArmour() == damage) {
-            GameIO.armourHit(0, isPoisoned(), isBurning(), isBurning());
-            setArmour(0);
+        } else if (getArmour() >= damage) {
+            GameIO.armourHit((armour - damage), isPoisoned(), isBurning(), isBurning());
+            setArmour(armour - damage);
         } else {
-            GameIO.armourHit((getArmour() - damage), isPoisoned(), isBurning(), isBurning());
-            setHealth(getHealth() - (getArmour() - damage));
+            GameIO.armourHit((damage - armour), isPoisoned(), isBurning(), isBurning());
+            setHealth(getHealth() - (damage - armour));
             setArmour(0);
         }
     }
