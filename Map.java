@@ -187,19 +187,19 @@ public class Map {
        for (int x = 0; x < 4; x++) {
            for (int y = 0; y < 4; y++) {
                if (r.getID() == rooms[x][y].getID()) {
-                   if (isLegal(x + 1, y)) {
+                   if (isLegal(x + 1, y) && (rooms[x+1][y].getDifficulty() != Difficulty.BLOCKED)) {
                        //Right
                        validRooms[0] = rooms[x + 1][y];
                    }
-                   if (isLegal(x - 1, y)) {
+                   if (isLegal(x - 1, y)&& (rooms[x-1][y].getDifficulty() != Difficulty.BLOCKED)) {
                        //Left
                        validRooms[1] = rooms[x - 1][y];
                    }
-                   if (isLegal(x, y + 1)) {
+                   if (isLegal(x, y + 1)&& (rooms[x][y+1].getDifficulty() != Difficulty.BLOCKED)) {
                        //Up
                        validRooms[2] = rooms[x][y + 1];
                    }
-                   if (isLegal(x, y - 1)) {
+                   if (isLegal(x, y - 1)&& (rooms[x][y-1].getDifficulty() != Difficulty.BLOCKED)) {
                        //Down
                        validRooms[3] = rooms[x][y - 1];
                    }
