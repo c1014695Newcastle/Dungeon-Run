@@ -237,15 +237,7 @@ public class Room {
             } else  if (e.getName().equals(NecroticEnemies.ELF.toString())){
                 playerDamage = e.fireDemonAttacks(p);
             }
-            if (p.getArmour() == 0) {
-                GameIO.damageReport(playerDamage, p.isPoisoned(), p.isBurning(), p.isBurning());
-                p.setHealth(p.getHealth() - playerDamage);
-            } else if (p.getArmour() == playerDamage) {
-                p.setArmour(0);
-            } else {
-                p.setHealth(p.getHealth() - (playerDamage - p.getArmour()));
-                p.setArmour(0);
-            }
+            p.takeDamage(playerDamage);
         }
     }
 
@@ -374,8 +366,7 @@ class BossRoom extends Room {
                                 case FENRIR -> damage = boss.fenPhaseOneAttack(p);
                                 case JORMUNGANDR -> damage = 0;
                             }
-                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
-                            p.setHealth(p.getHealth() - damage);
+                            p.takeDamage(damage);
                         }
                         case 2 -> {
                             switch (boss.getName()){
@@ -383,8 +374,7 @@ class BossRoom extends Room {
                                 case FENRIR -> damage = boss.fenPhaseTwoAttack(p);
                                 case JORMUNGANDR -> damage = 0;
                             }
-                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
-                            p.setHealth(p.getHealth() - damage);
+                            p.takeDamage(damage);
                         }
                         case 3 -> {
                             switch (boss.getName()){
@@ -392,8 +382,7 @@ class BossRoom extends Room {
                                 case FENRIR -> damage = boss.fenPhaseThreeAttack(p);
                                 case JORMUNGANDR -> damage = 0;
                             }
-                            GameIO.damageReport(damage, p.isPoisoned(), p.isBurning(), p.isBurning());
-                            p.setHealth(p.getHealth() - damage);
+                            p.takeDamage(damage);
                         }
                     }
                     if (p.getHealth() <= 0) {
@@ -419,6 +408,7 @@ class BossRoom extends Room {
             }
         }
     }
+
 
 
     /**

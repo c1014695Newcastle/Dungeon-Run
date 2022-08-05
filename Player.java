@@ -259,6 +259,21 @@ public class Player {
         castDamage += 5;
     }
 
+    protected void takeDamage(int damage) {
+        if (getArmour() == 0) {
+            GameIO.damageReport(damage, isPoisoned(), isBurning(), isBurning());
+            setHealth(getHealth() - damage);
+        } else if (getArmour() == damage) {
+            GameIO.armourHit(0, isPoisoned(), isBurning(), isBurning());
+            setArmour(0);
+        } else {
+            GameIO.armourHit((getArmour() - damage), isPoisoned(), isBurning(), isBurning());
+            setHealth(getHealth() - (getArmour() - damage));
+            setArmour(0);
+        }
+    }
+
+
     @Override
     public String toString(){
         String healthBar = GameIO.playerHealthBar(health, possibleHealth);

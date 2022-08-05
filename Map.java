@@ -2,6 +2,7 @@ import Enums.Difficulty;
 import Enums.Types;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -89,7 +90,7 @@ public class Map {
             Map m = new Map();
             System.out.println(m.toString(m.rooms[1][1].getID()));
             System.out.println(m.checkMap(0, 0));
-            System.out.println(m.checkValidRooms(m.getRooms()[0][0]));
+            System.out.println(Arrays.toString(m.checkValidRooms(m.getRooms()[0][0])));
         }
     }
 

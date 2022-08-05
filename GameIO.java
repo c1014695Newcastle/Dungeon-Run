@@ -177,6 +177,18 @@ public class GameIO {
         }
     }
 
+    public static void armourHit(int damage, boolean poisoned, boolean burning, boolean necrosis){
+        if (poisoned){
+            System.out.println("YOUR ARMOUR PROTECTS YOU, YOU TAKE " + damage + " DAMAGE BUT ARE NOW POISONED!");
+        } else if (burning) {
+            System.out.println("YOUR ARMOUR PROTECTS YOU, YOU TAKE " + damage + " DAMAGE BUT ARE NOW BURNING!");
+        } else if (necrosis) {
+            System.out.println("YOUR ARMOUR PROTECTS YOU, YOU TAKE " + damage + " DAMAGE BUT ARE NOW NECROTIC!");
+        } else {
+            System.out.println("YOUR ARMOUR PROTECTS YOU, YOU TAKE " + damage + " DAMAGE");
+        }
+    }
+
     /**\
      * Method to record the missed attack of a player against a boss
      * @param name the boss' name
