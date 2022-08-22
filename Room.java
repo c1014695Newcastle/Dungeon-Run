@@ -221,24 +221,20 @@ public class Room {
     private void enemyTurns(Player p){
         int playerDamage = 0;
         for (Enemy e : waveOne){
-            if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString().replace("_"," "))){
+            if (e.getName().equals(FireEnemies.FIRE_DRAUGR.toString().replace("_"," ")) || e.getName().equals(PoisonEnemies.POISON_DRAUGR.toString().replace("_"," ")) || e.getName().equals(NecroticEnemies.NECROTIC_DRAUGR.toString().replace("_"," "))){
                 playerDamage = e.draugrAttacks(p);
             } else  if (e.getName().equals(FireEnemies.FIRE_DEMON.toString().replace("_"," "))){
                 playerDamage = e.fireDemonAttacks(p);
             } else if (e.getName().equals(FireEnemies.SMOKESTACK.toString().replace("_"," "))){
                 playerDamage = e.smokestackAttacks();
-            } else  if (e.getName().equals(PoisonEnemies.POISON_DRAUGR.toString().replace("_"," "))){
-                playerDamage = e.pDraugrAttacks(p);
             } else if (e.getName().equals(PoisonEnemies.SNAKE.toString())){
                 playerDamage = e.snakeAttacks(p);
             } else  if (e.getName().equals(PoisonEnemies.TROLL.toString())){
                 playerDamage = e.trollAttacks(p);
-            } else  if (e.getName().equals(NecroticEnemies.NECROTIC_DRAUGR.toString().replace("_"," "))){
-                playerDamage = e.nDraugrAttacks(p);
             } else if (e.getName().equals(NecroticEnemies.WOLF.toString())){
-                playerDamage = e.smokestackAttacks();
+                playerDamage = e.wolfAttacks(p);
             } else  if (e.getName().equals(NecroticEnemies.ELF.toString())){
-                playerDamage = e.fireDemonAttacks(p);
+                playerDamage = e.elfAttacks(p);
             }
             p.takeDamage(playerDamage);
         }
