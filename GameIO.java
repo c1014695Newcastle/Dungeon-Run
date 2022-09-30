@@ -297,21 +297,21 @@ public class GameIO {
         System.out.println("Pick a room to continue");
         int x = 0;
         if (rooms[0] != null){
-            System.out.println("\t" + (x+1) + " - Down " + rooms[0]);
+            System.out.print("\t" + (x+1) + " - Down " + rooms[0]);
             x++;
         }
         if (rooms[1] != null){
-            System.out.println("\t" + (x+1) + " - Up " + rooms[1]);
+            System.out.print("\t" + (x+1) + " - Up " + rooms[1]);
             rooms[x] = rooms[1];
             x++;
         }
         if (rooms[2] != null){
-            System.out.println("\t" + (x+1) + " - Right " + rooms[2]);
+            System.out.print("\t" + (x+1) + " - Right " + rooms[2]);
             rooms[x] = rooms[2];
             x++;
         }
         if (rooms[3] != null){
-            System.out.println("\t" + (x+1) + " - Left " + rooms[3]);
+            System.out.print("\t" + (x+1) + " - Left " + rooms[3]);
             rooms[x] = rooms[3];
             x++;
         }
@@ -337,19 +337,19 @@ public class GameIO {
     }
 
     public static void fenVulnerable(){
-        System.out.println("Fafnir returns to the fighting plane, he is vulnerable again!");
+        System.out.println("Fenrir comes back into fighting distance, he is vulnerable again!");
     }
 
     public static void fenPhaseBattle(){
-        System.out.println("Fafnir drags his claws through the stone and summons Draugr to fight you!");
+        System.out.println("Fenrir cracks open the coffins beside him and raises Draugr to fight you!");
     }
 
     public static void fenClaws(){
-        System.out.println("Fafnir digs his claws into the stone and raises them to you!");
+        System.out.println("Fenrir wrenches his front paws free of his chains and flashes his clws!");
     }
 
     public static void fenSnarl(){
-        System.out.println("Fafnir spreads his wings and takes flight, he will be much harder to hit now!");
+        System.out.println("Fenrir thrashes against the cave walls, the sword in his mouth lodges free and falls to the ground!");
     }
 
     public static void jorVulnerable(){
