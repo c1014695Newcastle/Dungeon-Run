@@ -14,6 +14,8 @@ public class Player {
     private boolean burning;
     private int debuffCounter;
     private boolean necrosis;
+    private boolean dragonScale;
+    private boolean dragonClaw;
     private int xp;
 
     public Player(String name) {
@@ -31,6 +33,8 @@ public class Player {
         this.poisoned = false;
         this.burning = false;
         this.debuffCounter = 0;
+        this.dragonScale = false;
+        this.dragonClaw = false;
         this.necrosis = false;
     }
 
@@ -264,6 +268,21 @@ public class Player {
     protected void extraLife(){
         GameIO.reportExtraLife();
         lives++;
+    }
+
+    protected void dragonHeart(){
+        //GameIO.reportDragonHeart()
+        possibleHealth += 50;
+    }
+
+    protected void dragonScale(){
+        //GameIO.reportDragonScale();
+        dragonScale = true;
+    }
+
+    protected void dragonClaw(){
+        //GameIO.reportDragonClaw();
+        dragonClaw = true;
     }
 
     protected void takeDamage(int damage) {

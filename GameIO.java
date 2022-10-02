@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class GameIO {
@@ -61,6 +62,16 @@ public class GameIO {
                     3 - Swing
                     
                 > """);
+        return choiceIO(3);
+    }
+
+    public static String bossReward(TreeMap<String, String> rewards){
+        String[] keys = rewards.keySet().toArray(new String[3]);
+        System.out.println("""
+                Pick a Reward:""");
+        for (int i = 0; i < 3; i++){
+            System.out.format("\t%d - %s: %s\n",(i+1), keys[i],rewards.get(keys[i]));
+        }
         return choiceIO(3);
     }
 
@@ -376,6 +387,7 @@ public class GameIO {
 
     public static void main(String[] args) {
         reportLevelUp(3,2);
+        savePlayerRecord(new Player("Luke"));
     }
 
     public static void fafIntro() {
@@ -396,4 +408,38 @@ public class GameIO {
 
     public static void reportExtraLife() {
     }
+
+
+
+    public static void savePlayerRecord(Player p){
+        try {
+            FileWriter fw = new FileWriter("scores.csv", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            pw.println(p.getName() + "," + p.getXp());
+            pw.flush();
+            pw.close();
+
+            System.out.println("\n\nPLAYER SCORE SAVED\n");
+
+        } catch (IOException e) {
+            System.out.println("ERROR IN SAVING SCORE");
+        }
+    }
+
+    public static void printLeaderBoard() throws IOException {
+        ArrayList<String> scores = new ArrayList<>();
+        BufferedReader bw = new BufferedReader(new FileReader("scores.csv"));
+        String line = bw.readLine();
+
+        while (line != null) {
+            scores.add(line);
+            bw.readLine();
+        }
+
+
+    }
+
+
 }

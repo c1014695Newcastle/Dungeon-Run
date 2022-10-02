@@ -410,6 +410,28 @@ class BossRoom extends Room {
                     case JORMUNGANDR -> GameIO.jorVulnerable();
                 }
             }
+
+        }
+        //Pick a reward from the boss
+        String choice = GameIO.bossReward(boss.getRewards());
+        if (choice.equals("1")){
+            switch (boss.getName()){
+                case FAFNIR -> p.dragonHeart();
+                case FENRIR -> GameIO.fenVulnerable();
+                case JORMUNGANDR -> GameIO.jorVulnerable();
+            }
+        } else if (choice.equals("2")){
+            switch (boss.getName()){
+                case FAFNIR -> p.dragonScale();
+                case FENRIR -> GameIO.fenVulnerable();
+                case JORMUNGANDR -> GameIO.jorVulnerable();
+            }
+        } else {
+            switch (boss.getName()){
+                case FAFNIR -> p.dragonClaw();
+                case FENRIR -> GameIO.fenVulnerable();
+                case JORMUNGANDR -> GameIO.jorVulnerable();
+            }
         }
     }
 

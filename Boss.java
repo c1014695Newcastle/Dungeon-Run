@@ -3,6 +3,7 @@ import Enums.Types;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * faf - Fafnir
@@ -24,6 +25,7 @@ public class Boss {
     private final int xp;
     private int phase;
     private final String[] lines;
+    private final TreeMap<String, String> rewards;
 
     public int getLevel() {
         return level;
@@ -73,6 +75,10 @@ public class Boss {
         return lines;
     }
 
+    public TreeMap<String, String> getRewards() {
+        return rewards;
+    }
+
     public Boss(int level, bossName name) {
         this.level = level;
         this.possibleHealth = 200 + (level * 50);
@@ -82,6 +88,7 @@ public class Boss {
         this.xp = level * 50;
         this.phase = 1;
         this.lines = setLines(name);
+        this.rewards = setRewards(name);
     }
 
     private String[] setLines(bossName name) {
@@ -97,6 +104,28 @@ public class Boss {
             }
         }
         return null;
+    }
+
+    private TreeMap<String, String> setRewards(bossName name){
+        TreeMap<String, String> rewards = new TreeMap<>();
+        switch (name) {
+            case FAFNIR -> {
+                rewards.put("Dragon Heart", "+50 Health");
+                rewards.put("Dragon Scale", "Start each encounter with at least 25 armour");
+                rewards.put("Dragon Claw", "+15 damage to all bladed attacks, deal bonus fire damage for 1 turn");
+            }
+            case JORMUNGANDR -> {
+                rewards.put("Rune of Poison", "+10 damage to all rune attacks, deal bonus poison damage for 1 turn");
+                rewards.put("Snake Cloak", "");
+                rewards.put("Snake Dagger", "");
+            }
+            case FENRIR -> {
+                rewards.put("REWARD A", "+10 damage to all rune attacks, deal bonus poison damage for 1 turn");
+                rewards.put("REWARD B", "");
+                rewards.put("REWARD C", "");
+            }
+        }
+        return rewards;
     }
 
     protected int fafPhaseOneAttack(Player p){
@@ -231,6 +260,7 @@ public class Boss {
             return baseDamage * 2;
         }
     }
+
 
     public static void main(String[] args) {
         Boss d = new Boss(1, bossName.FAFNIR);
