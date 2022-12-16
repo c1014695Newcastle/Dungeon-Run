@@ -219,6 +219,7 @@ public class Enemy {
         }
     }
 
+    // TODO: IMPLEMENT TROLL ATTACKS
     protected int trollAttacks(Player p){
         Random rn = new Random();
         String[] attacks = getAttacks();

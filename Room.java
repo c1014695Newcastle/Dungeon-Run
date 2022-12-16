@@ -244,7 +244,7 @@ public class Room {
         p.debuffs();
         String choice;
         int damage;
-        choice = GameIO.playerChoice();
+        choice = GameIO.playerChoice(p.getShieldCounter());
         if (choice.equals("1")){ // Cast
             int[] castDamage = p.cast();
             for (int x : castDamage){
@@ -269,7 +269,7 @@ public class Room {
                 GameIO.enemyDies(enemytoDamage.getName(), enemytoDamage.getXp());
                 waveOne.remove(enemytoDamage);
             }
-        } else { // Swing
+        } else if (choice.equals("3")) { // Swing
             damage = p.swing()/ waveOne.size();
             for (int x = 0; x < waveOne.size(); x++) {
                 Enemy enemytoDamage = waveOne.get(x);
@@ -282,6 +282,8 @@ public class Room {
                 }
                 GameIO.sleep(1000);
             }
+        } else {
+            p.shield();
         }
         p.checkDebuffs();
     }
@@ -290,6 +292,7 @@ public class Room {
         p.setHealth(p.getPossibleHealth());
         p.levelUp();
         p.removeDebuffs();
+        p.resetShield();
     }
 
     public static void main(String[] args) {
@@ -338,26 +341,6 @@ class BossRoom extends Room {
                 GameIO.sleep(1000);
                 attackBoss(p);
                 GameIO.sleep(1000);
-                if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75) && boss.getPhase() != 2) {
-                    switch (boss.getName()){
-                        case FAFNIR -> GameIO.fafClaws();
-                        case FENRIR -> GameIO.fenClaws();
-                        case JORMUNGANDR -> System.out.println("NA");
-                    }
-                    boss.setPhase(2);
-                    GameIO.reportSupportEnemies(boss.getName().toString());
-                    phaseBreak(2, boss.getLevel());
-                } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25) && boss.getPhase() != 3) {
-                    switch (boss.getName()){
-                        case FAFNIR -> GameIO.fafFlight();
-                        case FENRIR -> GameIO.fenSnarl();
-                        case JORMUNGANDR -> System.out.println("NA");
-                    }
-                    boss.setPhase(3);
-                    GameIO.reportSupportEnemies(boss.getName().toString());
-                    boss.setBaseDamage(boss.getBaseDamage() * 2);
-                    phaseBreak(3, boss.getLevel());
-                }
                 GameIO.sleep(2000);
                 if (boss.getHealth() >= 0) {
                     GameIO.bossLine(boss.getLines()[rn.nextInt(boss.getLines().length)]);
@@ -391,6 +374,26 @@ class BossRoom extends Room {
                     }
                     if (p.getHealth() <= 0) {
                         GameIO.playerDies();
+                    }
+                    if (boss.getHealth() <= (boss.getPossibleHealth() * 0.75) && boss.getPhase() != 2) {
+                        switch (boss.getName()){
+                            case FAFNIR -> GameIO.fafClaws();
+                            case FENRIR -> GameIO.fenClaws();
+                            case JORMUNGANDR -> System.out.println("NA");
+                        }
+                        boss.setPhase(2);
+                        GameIO.reportSupportEnemies(boss.getName().toString());
+                        phaseBreak(2, boss.getLevel());
+                    } else if (boss.getHealth() <= (boss.getPossibleHealth() * 0.25) && boss.getPhase() != 3) {
+                        switch (boss.getName()){
+                            case FAFNIR -> GameIO.fafFlight();
+                            case FENRIR -> GameIO.fenSnarl();
+                            case JORMUNGANDR -> System.out.println("NA");
+                        }
+                        boss.setPhase(3);
+                        GameIO.reportSupportEnemies(boss.getName().toString());
+                        boss.setBaseDamage(boss.getBaseDamage() * 2);
+                        phaseBreak(3, boss.getLevel());
                     }
                 } else {
                     System.out.println("YOU KILLED " + boss.getName());
@@ -449,7 +452,7 @@ class BossRoom extends Room {
         }
         String choice;
         int damage;
-        choice = GameIO.playerChoice();
+        choice = GameIO.playerChoice(p.getShieldCounter());
         if (choice.equals("1")) { // Cast
             int[] castDamage = p.cast();
             for (int x : castDamage) {

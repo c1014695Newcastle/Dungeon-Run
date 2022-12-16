@@ -110,14 +110,14 @@ public class Boss {
         TreeMap<String, String> rewards = new TreeMap<>();
         switch (name) {
             case FAFNIR -> {
-                rewards.put("Dragon Heart", "+50 Health");
-                rewards.put("Dragon Scale", "Start each encounter with at least 25 armour");
-                rewards.put("Dragon Claw", "+15 damage to all bladed attacks, deal bonus fire damage for 1 turn");
+                rewards.put("Dragon Heart", "The calloused heart of an ancient beast, it teems with dark power and godlike strength.\n\t\t+50 Health");
+                rewards.put("Dragon Scale", "The seasoned hide of a powerful dragon.\n\t\tStart each encounter with at least 25 armour");
+                rewards.put("Dragon Claw", "A sharp instrument of war, plucked from Fafnir's corpse.\n\t\t+10% damage to all bladed attacks, +25% on critical roll attacks");
             }
             case JORMUNGANDR -> {
-                rewards.put("Rune of Poison", "+10 damage to all rune attacks, deal bonus poison damage for 1 turn");
-                rewards.put("Snake Cloak", "");
-                rewards.put("Snake Dagger", "");
+                rewards.put("Rune of Poison", "A rune that flashed into your head upon defeating your foe\n\t\t+10 damage to all rune attacks, deal bonus poison damage for 1 turn");
+                rewards.put("Snake Cloak", "A cloak fashioned from the scales of the world serpent\n\t\t +20 to all armour");
+                rewards.put("Snake Dagger", "A dagger fashioned from the fang of Jormungandr\n\t\t +25% damage to all bladed attacks");
             }
             case FENRIR -> {
                 rewards.put("REWARD A", "+10 damage to all rune attacks, deal bonus poison damage for 1 turn");

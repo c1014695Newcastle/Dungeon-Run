@@ -144,6 +144,7 @@ public class Map {
         int x = 0, y = 0;
         Room r = rooms[x][y];
         while (x != 4 && p.getHealth() > 0){
+            p.checkArmour();
             r.startEncounter(p);
             if (p.getHealth() <= 0){
                 break;
@@ -174,6 +175,10 @@ public class Map {
                     }
                 }
             }
+        }
+        if (p.getHealth() > 0){
+            //LOKI BOSS
+            System.out.println("SOMETHING IS YET TO COME");
         }
    }
 

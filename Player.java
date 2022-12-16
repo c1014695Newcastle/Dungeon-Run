@@ -10,6 +10,8 @@ public class Player {
 
     private int castDamage;
     private int armour;
+    private boolean shield;
+    private int shieldCounter;
     private boolean poisoned;
     private boolean burning;
     private int debuffCounter;
@@ -29,6 +31,8 @@ public class Player {
         this.castDamage = 5;
         this.chopDamage = 25;
         this.swingDamage = 35;
+        this.shield = false;
+        this.shieldCounter = 1;
         this.armour = 0;
         this.poisoned = false;
         this.burning = false;
@@ -114,6 +118,22 @@ public class Player {
         this.armour = armour;
     }
 
+    public boolean isShield() {
+        return shield;
+    }
+
+    public void setShield(boolean shield) {
+        this.shield = shield;
+    }
+
+    public int getShieldCounter() {
+        return shieldCounter;
+    }
+
+    public void setShieldCounter(int shieldCounter) {
+        this.shieldCounter = shieldCounter;
+    }
+
     public boolean isPoisoned() {
         return poisoned;
     }
@@ -146,6 +166,22 @@ public class Player {
         this.debuffCounter = debuffCounter;
     }
 
+    public boolean isDragonScale() {
+        return dragonScale;
+    }
+
+    public void setDragonScale(boolean dragonScale) {
+        this.dragonScale = dragonScale;
+    }
+
+    public boolean isDragonClaw() {
+        return dragonClaw;
+    }
+
+    public void setDragonClaw(boolean dragonClaw) {
+        this.dragonClaw = dragonClaw;
+    }
+
     public void removeDebuffs(){
         this.poisoned = false;
         this.burning = false;
@@ -159,7 +195,7 @@ public class Player {
      */
     public int chop(){
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
-        return damageDecider(chopDamage, roll);
+        return damageDecider(chopDamage, roll, true);
     }
 
     /**
@@ -171,7 +207,7 @@ public class Player {
         int[] damage = {0,0,0};
         for (int x = 0; x < 3; x ++){
             roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
-            damage[x] = damageDecider(castDamage, roll);
+            damage[x] = damageDecider(castDamage, roll, false);
         }
         return damage;
     }
@@ -183,22 +219,34 @@ public class Player {
     public int swing(){
         System.out.println("Not implemented yet");
         int roll = GameIO.playerRoll(isPoisoned(), isBurning(), isNecrosis());
-        return damageDecider(swingDamage, roll);
+        return damageDecider(swingDamage, roll, true);
     }
 
-    private int damageDecider(int baseDamage, int roll){
-        if (roll == 1){
-            return 0;
-        } else if (roll >= 2 && roll < 4){
-            return baseDamage/2;
+    private int damageDecider(int baseDamage, int roll, boolean bladedAttack){
+        int damage = 0;
+        if (roll >= 2 && roll < 4){
+            damage = baseDamage/2;
         } else if (roll >= 4 && roll < 6) {
-            return baseDamage;
+            damage = baseDamage;
         } else if (roll >= 6 && roll < 8) {
-            return baseDamage + (baseDamage * roll/10);
-        } else if (roll >= 8) {
-            return baseDamage * 2;
+            damage = baseDamage + (baseDamage * roll/10);
+        } else {
+            damage = baseDamage * 2;
         }
-        return 0;
+        if (bladedAttack && dragonClaw){
+            if (roll >= 8){
+                damage *= 1.25;
+            } else
+                damage *= 1.1;
+        }
+        return damage;
+    }
+
+    public void shield(){
+        if (shieldCounter > 0) {
+            shield = true;
+            shieldCounter--;
+        }
     }
 
     public void checkDebuffs(){
@@ -286,19 +334,29 @@ public class Player {
     }
 
     protected void takeDamage(int damage) {
-        if (getArmour() == 0) {
-            GameIO.damageReport(damage, isPoisoned(), isBurning(), isBurning());
-            setHealth(getHealth() - damage);
-        } else if (getArmour() >= damage) {
-            GameIO.armourHit((armour - damage), isPoisoned(), isBurning(), isBurning());
-            setArmour(armour - damage);
+        if (!shield) {
+            if (getArmour() == 0) {
+                GameIO.damageReport(damage, isPoisoned(), isBurning(), isBurning());
+                setHealth(getHealth() - damage);
+            } else if (getArmour() >= damage) {
+                GameIO.armourHit((armour - damage), isPoisoned(), isBurning(), isBurning());
+                setArmour(armour - damage);
+            } else {
+                GameIO.armourHit((damage - armour), isPoisoned(), isBurning(), isBurning());
+                setHealth(getHealth() - (damage - armour));
+                setArmour(0);
+            }
         } else {
-            GameIO.armourHit((damage - armour), isPoisoned(), isBurning(), isBurning());
-            setHealth(getHealth() - (damage - armour));
-            setArmour(0);
+            GameIO.reportShield();
+            shield = false;
         }
     }
 
+    protected void checkArmour(){
+        if (dragonScale && (armour < 25)){
+            setArmour(25);
+        }
+    }
 
     @Override
     public String toString(){
@@ -311,4 +369,8 @@ public class Player {
     }
 
 
+    public void resetShield() {
+        shield = false;
+        shieldCounter = 1;
+    }
 }

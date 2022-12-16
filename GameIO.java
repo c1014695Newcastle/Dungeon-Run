@@ -54,15 +54,27 @@ public class GameIO {
      * Method to allow the player to decide which attack they use on their next turn
      * @return the player's choice of attack
      */
-    public static String playerChoice(){
-        System.out.print("""
-                Pick an attack:
-                    1 - Cast
-                    2 - Chop
-                    3 - Swing
-                    
-                > """);
-        return choiceIO(3);
+    public static String playerChoice(int shield){
+        if (shield > 0) {
+            System.out.print("""
+                    Pick an attack:
+                        1 - Cast
+                        2 - Chop
+                        3 - Swing
+                        4 - Shield
+                        
+                    > """);
+            return choiceIO(4);
+        } else {
+            System.out.print("""
+                    Pick an attack:
+                        1 - Cast
+                        2 - Chop
+                        3 - Swing
+                        
+                    > """);
+            return choiceIO(3); 
+        }
     }
 
     public static String bossReward(TreeMap<String, String> rewards){
@@ -442,4 +454,7 @@ public class GameIO {
     }
 
 
+    public static void reportShield() {
+        System.out.println("\nYOUR SHIELD PROTECTS YOU FROM DAMAGE\n");
+    }
 }
